@@ -1,0 +1,52 @@
+<link rel="stylesheet" type="text/css" href="http://at.alicdn.com/t/font_411407_a93ufzj32h3vunmi.css">
+<script type="text/javascript" src="__ROOT__/Public/Home/js/jquery-3.1.1.min.js"></script>
+<div class="container noPadding">
+    <nav class="navbar navbar-default mynavbar">
+        <div class="container-fluid">
+            <!--按钮-->
+            <div class="navbar-header">
+                <img src="__ROOT__/Public/Home/images/logo.gif" alt="" class="logoImg">
+                <span class="userInfo">{$username.name}：{$username.tel}</span>
+                <button type="button" class="navbar-toggle collapsed btn-sider" id="openSide">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+          
+        </div>
+    </nav>
+</div>
+    <div class="modle"></div>
+    <ul class="navbar-collapse" id="headSide">
+
+        <li> 
+        <a href="__ROOT__/index.php/Home/Index/index.html"><i class="iconfont icon-jianjie"></i>公司首页</a>
+        </li>    
+        <li><a href="__ROOT__/index.php/Home/Index/types/type/2"><i class="iconfont icon-gonggao"></i>公司公告</a></li>    
+        <li> <a href="__ROOT__/index.php/Home/Index/K.html"><i class="iconfont icon-icon-test"></i>同步k线图</a></li>    
+        <!--<li><a href="__ROOT__/index.php/Home/Index/types/type/3"><i class="iconfont icon-tuandui"></i>值班团队</a></li>    -->
+        <!--<li><a href="__ROOT__/index.php/Home/Index/types/type/4"><i class="iconfont icon-zhuanjia"></i>分析专家</a></li>    -->
+        <li> <a href="__ROOT__/index.php/Home/User/my.html"><i class="iconfont icon-gerenzhongxinxia"></i>个人中心</a></li>    
+        <li><a href="__ROOT__/index.php/Home/Index/gongpai.html"><i class="iconfont icon-xunhuan"></i>ARS公排</a></li>    
+        <li><a href="__ROOT__/index.php/Home/Index/share/id/{$username.uid}"><i class="iconfont icon-fenxiang"></i>ARS分享</a></li>    
+        <li><a href="__ROOT__/index.php/Home/Login/login"><i class="iconfont icon-tuichu"></i>退出系统</a></li>    
+    </ul>
+
+<script type="text/javascript">
+    $("#openSide").click(function() {
+         $(".modle").show();
+         $("#headSide").animate({ 
+            left: "0"
+          }, 500 );
+    });
+
+    $(".modle").click(function() {
+         
+         $("#headSide").animate({ 
+            left: "-180px"
+          }, 500);
+           $(".modle").hide();
+         
+    });
+</script>

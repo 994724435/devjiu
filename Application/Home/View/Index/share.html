@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        <title>MIF分享</title>
+        <link href="__ROOT__/Public/Home/css/bootstrap.min.css" rel="stylesheet">
+        <link href="__ROOT__/Public/Home/css/aui.min.css" rel="stylesheet">
+        <link href="__ROOT__/Public/Home/css/mui.picker.css" rel="stylesheet">
+        <link href="__ROOT__/Public/Home/css/mui.poppicker.css" rel="stylesheet">
+        <link href="__ROOT__/Public/Home/css/style.css" rel="stylesheet">
+         <script type="text/javascript" src="__ROOT__/Public/Home/js/jquery-3.1.1.min.js"></script>
+         <script type="text/javascript" src="__ROOT__/Public/Home/js/aui.js"></script>
+         <script type="text/javascript" src="__ROOT__/Public/Home/js/fontSize.js"></script>
+        <script type="text/javascript" src="__ROOT__/Public/Home/js/mui.picker.js"></script>
+        <script type="text/javascript" src="__ROOT__/Public/Home/js/mui.poppicker.js"></script>
+        <script type="text/javascript" src="__ROOT__/Public/Home/js/bootstrap.min.js"></script>
+        <style>
+            /*body{background: url(__ROOT__/Public/Home/images/bg.png) no-repeat;background-size: 100% auto;position: absolute;width: 100%;height: 100%;}*/
+            .bianhao{font-size: .32rem;position: absolute;top: 3.89rem;left: 2.83rem;z-index: 1;}
+            .bgimg{width: 100%;position: fixed;z-index: 0;}
+            .codeImg{width: 3rem;top: 4.6rem;left: 2.25rem;position: absolute;z-index: 1;}
+        </style>
+    </head>
+    <body>
+         <img src="__ROOT__/Public/Home/images/bg.png" alt="" class="bgimg">
+         <!--<span class="bianhao">{$username.uid}</span>-->
+         <img src="http://402231.ouyouhui.com/index.php/Admin/User/qrcode/id/<?php echo $_GET['id'];?>" alt="" class="codeImg">
+    </body>
+</html>

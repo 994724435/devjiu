@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        <title>个人中心</title>
+        <link href="__ROOT__/Public/Home/css/bootstrap.min.css" rel="stylesheet">
+        <link href="__ROOT__/Public/Home/css/aui.min.css" rel="stylesheet">
+        <link href="__ROOT__/Public/Home/css/mui.picker.css" rel="stylesheet">
+        <link href="__ROOT__/Public/Home/css/mui.poppicker.css" rel="stylesheet">
+        <link href="__ROOT__/Public/Home/css/style.css" rel="stylesheet">
+         <script type="text/javascript" src="__ROOT__/Public/Home/js/jquery-3.1.1.min.js"></script>
+         <script type="text/javascript" src="__ROOT__/Public/Home/js/aui.js"></script>
+        <script type="text/javascript" src="__ROOT__/Public/Home/js/mui.picker.js"></script>
+        <script type="text/javascript" src="__ROOT__/Public/Home/js/mui.poppicker.js"></script>
+        <script type="text/javascript" src="__ROOT__/Public/Home/js/bootstrap.min.js"></script>
+        <style>
+         .buy{width: 25%;background: #337ab7;color: #fff;height: 100%;float: right;text-align: center;font-size: 15px;}
+         label{width: 70%;padding: 8px 3px;font-weight: normal;box-sizing: border-box;margin-bottom: 0;font-size: 14px;}
+         /*.mui-input-group .mui-input-row{min-height: 41px;}*/
+         .lest{padding: 0 0 0 3px;background: #fff;border-bottom: 1px solid #eee;}
+        </style>
+    </head>
+<body class="bodyColor">
+	  <header class="mui-bar mui-bar-nav">
+	  <a class="mui-icon mui-icon-left-nav mui-pull-left mui-action-back"></a>
+	  <h1 class="mui-title">交易大厅</h1>
+	</header>
+	<div class="mui-content">
+        <foreach name="nextlog" item='v'>
+            <div class="lest">
+                <label>
+                    <a href="__ROOT__/index.php/Home/User/rechargeEnd/id/{$v.id}">
+                        {$v.username} 挂卖金币：{$v.income}
+                    </a>
+                </label>
+
+                <if condition="$v.state eq 4">
+                    <if condition="$v.orderid eq 1">
+                        <button class="buy" style="background:cadetblue;">等待打款</button>
+                    </if>
+                    <if condition="$v.orderid eq 2">
+                        <a href="__ROOT__/index.php/Home/Index/dakuan/id/{$v.commitid}"><button class="buy">确认打款</button></a>
+                    </if>
+                </if>
+
+                <if condition="$v.state eq 5">
+                    <if condition="$v.orderid eq 1">
+                        <a href="__ROOT__/index.php/Home/Index/dakuan/id/{$v.commitid}"><button class="buy">确认收款</button></a>
+                    </if>
+                    <if condition="$v.orderid eq 2">
+                        <button class="buy" style="background:cadetblue;">等待收款</button>
+                    </if>
+                </if>
+
+            </div>
+        </foreach>
+
+
+        <foreach name="log" item='v'>
+          <div class="lest">
+             <label>{$v.username} 挂卖金币：{$v.income}</label>
+             <a href="__ROOT__/index.php/Home/User/buys/id/{$v.id}"><button class="buy">我要购买</button></a>
+          </div>
+        </foreach>
+
+
+	</div>
+  <script type="text/javascript">
+     
+  </script>
+</body>
+</html>
