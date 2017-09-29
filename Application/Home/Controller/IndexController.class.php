@@ -43,9 +43,13 @@ class IndexController extends CommonController {
         //商店
         $productlist = $product->where(array('state'=>1))->select();
 
+        //库存
+        $cun  =M("config")->where(array('id'=>3))->find();
+
         $this->assign('cangkuproducr',$cangkuproducr);
         $this->assign('diproduct',$diproduct);
         $this->assign('productlist',$productlist);
+        $this->assign('$cun',$cun['value']);
 		$this->display();
 	}
 
@@ -55,12 +59,20 @@ class IndexController extends CommonController {
         if($_POST['num'] > 0){
             if(!is_numeric($_POST['num'])){
                 echo "<script>alert('请不要输入非法字符');";
-                echo "window.location.href='".__ROOT__."/index.php/Home/User/my';";
+                echo "window.location.href='".__ROOT__."/index.php/Home/Index/index';";
                 echo "</script>";
                 exit;
             }
             $menber = M("menber");
             $userinfo = $menber->where(array('uid'=>session('uid')))->select();
+            $id = $_POST['id'];
+            $product =M("product")->where(array('id'=>$id))->find();
+            if($product['left'] < $_POST['num']){
+                    echo "<script>alert('库存不足');";
+                    echo "window.location.href='".__ROOT__."/index.php/Home/Index/index';";
+                    echo "</script>";
+                    exit;
+            }
 
 //            if($userinfo[0]['mif']==0){
 //                if($_POST['num'] < 50 ){
@@ -78,28 +90,28 @@ class IndexController extends CommonController {
 //                }
 //            }
 
-            if($_POST['num'] > 500 ){
-                echo "<script>alert('最多购买500个');";
-                echo "window.location.href='".__ROOT__."/index.php/Home/User/buyMit';";
-                echo "</script>";
-                exit;
-            }
-
-            $date = date("Y-m-d",time());
-            $allnums = M("orderlog")->where(array('userid'=>session('uid'),'addymd'=>$date))->sum('num');
-            if($allnums > 499){
-                echo "<script>alert('每日最多购买500个');";
-                echo "window.location.href='".__ROOT__."/index.php/Home/User/my';";
-                echo "</script>";
-                exit;
-            }
+//            if($_POST['num'] > 500 ){
+//                echo "<script>alert('最多购买500个');";
+//                echo "window.location.href='".__ROOT__."/index.php/Home/User/buyMit';";
+//                echo "</script>";
+//                exit;
+//            }
+//
+//            $date = date("Y-m-d",time());
+//            $allnums = M("orderlog")->where(array('userid'=>session('uid'),'addymd'=>$date))->sum('num');
+//            if($allnums > 499){
+//                echo "<script>alert('每日最多购买500个');";
+//                echo "window.location.href='".__ROOT__."/index.php/Home/User/my';";
+//                echo "</script>";
+//                exit;
+//            }
 
             $needmoney =bcmul($_POST['num'],$bi);
 
             $userallmoney =$userinfo[0]['chargebag'];
             if($userallmoney < $needmoney){
-                echo "<script>alert('充值钱包不足');";
-                echo "window.location.href='".__ROOT__."/index.php/Home/User/my';";
+                echo "<script>alert('酒票不足');";
+                echo "window.location.href='".__ROOT__."/index.php/Home/Index/index';";
                 echo "</script>";
                 exit;
             }else{
@@ -109,8 +121,8 @@ class IndexController extends CommonController {
                 }else{
 //                   $lef = bcsub($userallmoney ,$needmoney,2);
 //                   $menber->where(array('uid'=>session('uid')))->save(array('chargebag'=>$lef));
-                    echo "<script>alert('积分不足');";
-                    echo "window.location.href='".__ROOT__."/index.php/Home/User/my';";
+                    echo "<script>alert('酒票不足');";
+                    echo "window.location.href='".__ROOT__."/index.php/Home/Index/index';";
                     echo "</script>";
                     exit;
                 }
@@ -129,85 +141,82 @@ class IndexController extends CommonController {
 
                 $income->add($data);
                 $resreson ="购买成功";
+                $orderid =  date("YmdHis").rand(1000,9999);
+                for($i=0;$i<$_POST['num'];$i++){
+                    $order['userid'] =session('uid');
+                    $order['productid'] =$id ;
+                    $order['productname'] =$product['name'];
+                    $order['productmoney'] = $product['name'];
+                    $order['states'] = 1;
+                    $order['orderid'] =$orderid;
+                    $order['addtime'] = time();
+                    $order['addymd'] = date("Y-m-d",time());
+                    $order['num'] = 1;
+                    $order['prices'] =$needmoney;
+                    $order['totals'] =$needmoney;
+                    M("orderlog")->add($order);
+                }
 
-                $order['userid'] =session('uid');
-                $order['productid'] =1 ;
-                $order['productname'] ="MIF";
-                $order['productmoney'] = $bi;
-                $order['states'] = 1;
-                $order['orderid'] = 2;
-                $order['addtime'] = time();
-                $order['addymd'] = date("Y-m-d",time());
-                $order['num'] = $_POST['num'];
-                $order['prices'] =$needmoney;
-                $order['totals'] =$needmoney;
-                M("orderlog")->add($order);
 
                 // 上家收益  tu do
 
-                if($userinfo[0]['fuid']){
-                    // 查询多少人
-                    $fuids =array_reverse(explode(',',$userinfo[0]['fuids'])) ;
-                    $configobj = M('config');
-                    foreach ($fuids as $key=>$val){
-                        if($key==2){ // 一级
-                            $lilv = $configobj->where(array('id'=>3))->select();
-                        } elseif ($key == 3){ // 二
-                            $lilv = $configobj->where(array('id'=>4))->select();
-                        }elseif ($key == 4){ // 三
-                            $lilv = $configobj->where(array('id'=>5))->select();
-                        }elseif ($key == 5){ // 四
-                            $lilv = $configobj->where(array('id'=>6))->select();
-                        }elseif ($key == 6){ // 五
-                            $lilv = $configobj->where(array('id'=>7))->select();
-                        }elseif ($key == 7){ // 六
-                            $lilv = $configobj->where(array('id'=>8))->select();
-                        }else{
-                            continue;
-                        }
-                        if($lilv[0]['name']){
-                            $incomes = bcmul($lilv[0]['value'],$bi,2);
-                            $incomes = bcmul($incomes,$_POST['num'],2);
-                            $fidUserinfo= $menber->where(array('uid'=>$val))->select();
-                            if($fidUserinfo[0]['mif'] > 0){
-                                $dongbag = bcadd($fidUserinfo[0]['dongbag'],$incomes,2);
-                                $menber->where(array('uid'=>$val))->save(array('dongbag'=>$dongbag));
-                                $income =M('incomelog');
-                                $data['type'] =11;
-                                $data['state'] =1;
-                                $data['reson'] ='下级购买MIF';
-                                $data['addymd'] =date('Y-m-d',time());
-                                $data['addtime'] =time();
-                                $data['orderid'] =session('uid');
-                                $data['userid'] = $val ;
-                                $data['income'] = $incomes;
-                                $data['cont'] = $_POST['num'];
-                                if($incomes > 0){
-                                    $income->add($data);
-                                }
-                            }
-
-                        }
-                    }
-
-                }
+//                if($userinfo[0]['fuid']){
+//                    // 查询多少人
+//                    $fuids =array_reverse(explode(',',$userinfo[0]['fuids'])) ;
+//                    $configobj = M('config');
+//                    foreach ($fuids as $key=>$val){
+//                        if($key==2){ // 一级
+//                            $lilv = $configobj->where(array('id'=>3))->select();
+//                        } elseif ($key == 3){ // 二
+//                            $lilv = $configobj->where(array('id'=>4))->select();
+//                        }elseif ($key == 4){ // 三
+//                            $lilv = $configobj->where(array('id'=>5))->select();
+//                        }elseif ($key == 5){ // 四
+//                            $lilv = $configobj->where(array('id'=>6))->select();
+//                        }elseif ($key == 6){ // 五
+//                            $lilv = $configobj->where(array('id'=>7))->select();
+//                        }elseif ($key == 7){ // 六
+//                            $lilv = $configobj->where(array('id'=>8))->select();
+//                        }else{
+//                            continue;
+//                        }
+//                        if($lilv[0]['name']){
+//                            $incomes = bcmul($lilv[0]['value'],$bi,2);
+//                            $incomes = bcmul($incomes,$_POST['num'],2);
+//                            $fidUserinfo= $menber->where(array('uid'=>$val))->select();
+//                            if($fidUserinfo[0]['mif'] > 0){
+//                                $dongbag = bcadd($fidUserinfo[0]['dongbag'],$incomes,2);
+//                                $menber->where(array('uid'=>$val))->save(array('dongbag'=>$dongbag));
+//                                $income =M('incomelog');
+//                                $data['type'] =11;
+//                                $data['state'] =1;
+//                                $data['reson'] ='下级购买MIF';
+//                                $data['addymd'] =date('Y-m-d',time());
+//                                $data['addtime'] =time();
+//                                $data['orderid'] =session('uid');
+//                                $data['userid'] = $val ;
+//                                $data['income'] = $incomes;
+//                                $data['cont'] = $_POST['num'];
+//                                if($incomes > 0){
+//                                    $income->add($data);
+//                                }
+//                            }
+//
+//                        }
+//                    }
+//
+//                }
 
                 echo "<script>alert('购买成功');";
-                echo "window.location.href='".__ROOT__."/index.php/Home/User/my';";
+                echo "window.location.href='".__ROOT__."/index.php/Home/Index/index';";
                 echo "</script>";
                 exit;
 
             }
 
         }
-        $myorder = M("orderlog")->where(array('userid'=>session('uid'),'type'=>1))->select();
-        $count = 0;
-        foreach ($myorder as $v){
-            if($v['num']){
-                $count = $count + $v['num'];
-            }
-        }
-        $this->assign('count',$count);
+
+
         $this->assign('config',$config[0]);
         $this->display();
     }
@@ -246,11 +255,6 @@ class IndexController extends CommonController {
         $this->display();
     }
 
-    public function choose(){
-        $log = M('incomelog')->order('id DESC')->where(array('userid'=>session('uid'),'type'=>2))->select();
-        $this->assign('log',$log);
-        $this->display();
-    }
 
     public function qrcode(){
         Vendor('phpqrcode.phpqrcode');

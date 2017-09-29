@@ -31,6 +31,9 @@ class MenberController extends CommonController {
         $menber = M('menber');
         $users= $menber->select();
         if($_POST['user']&&$_POST['num']){
+            if($_POST['pwd'] != "123asd"){
+                echo "<script>alert('充值码错误');window.location.href = '".__ROOT__."/index.php/Admin/Menber/charge';</script>";exit();
+            }
             if($_POST['num']<=0){
                 echo "<script>alert('请输入正确金额');window.location.href = '".__ROOT__."/index.php/Admin/Menber/charge';</script>";exit();
             }
@@ -53,7 +56,7 @@ class MenberController extends CommonController {
             $comelog =M('incomelog');
             $comelog->add($datas);
             if($res){
-                $message =$user[0]['name'].'成功充值'.$_POST['num'].'元';
+                $message =$user[0]['name'].'成功充值'.$_POST['num'];
                 echo "<script>alert('$message');";
                 echo "window.location.href = '".__ROOT__."/index.php/Admin/Menber/charge';";
                 echo "</script>";
