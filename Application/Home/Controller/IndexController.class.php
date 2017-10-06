@@ -34,7 +34,94 @@ class IndexController extends CommonController {
 
 
     public function friend(){
-        
+        $menber = M("menber");
+        $friend =$menber->where(array('uid'=>session('uid')))->find();
+        $friends= array();
+        if($friend['friends']){
+            $str =$friend['friends'];
+            $newstr = substr($str,0,strlen($str)-1);
+            $map['uid'] = array('in',$newstr);
+            $friends = $menber->where($map)->select();
+        }
+
+        $this->assign('friend',$friends);
+        $this->display();
+    }
+
+
+    public function addFriend(){
+        if($_POST['tel']){
+            $menber = M("menber");
+            $friend =$menber->where(array('tel'=>$_POST['tel']))->find();
+            if(!$friend['uid']){
+                echo "<script>alert('用户不存在');";
+                echo "window.location.href='".__ROOT__."/index.php/Home/Index/addFriend';";
+                echo "</script>";
+                exit;
+            }
+            $mine =$menber->where(array('uid'=>session('uid')))->find();
+            $friends =  $mine['friends'].$friend['uid'].',';
+            $menber->where(array('uid'=>session('uid')))->save(array('friends'=>$friends));
+
+            echo "<script>alert('添加成功');";
+            echo "window.location.href='".__ROOT__."/index.php/Home/Index/friend';";
+            echo "</script>";
+            exit;
+        }
+
+        $this->display();
+    }
+
+    public function mailBox(){
+        $condition['to_user_id'] = session('uid');
+        $condition['type'] = 3;
+        $condition['_logic'] = 'OR';
+        $msg =M("message")->where($condition)->select();
+        $this->assign('msg',$msg);
+        $this->display();
+    }
+
+    public function sendMsg(){
+        if($_POST['content']){
+            $menber = M("menber");
+            $mine =$menber->where(array('uid'=>session('uid')))->find();
+            if($_GET['commitid']){
+                $data['commitid'] =$_GET['commitid'];
+            }
+            $data['f_user_name'] =$mine['name'];
+            $data['f_user_phone'] =$mine['tel'];
+            $data['f_user_id'] =$mine['uid'];
+            $data['to_user_name'] ="admin";
+            $data['message'] =$_POST['content'];
+
+            $data['f_user_name'] =$mine['name'];
+
+            M("message")->add($data);
+            echo "<script>alert('添加成功');";
+            echo "window.location.href='".__ROOT__."/index.php/Home/Index/friend';";
+            echo "</script>";
+            exit;
+        }
+
+        $this->display();
+    }
+
+    public function group(){
+        $menber = M("menber");
+
+        $one =$menber->where(array('fid'=>session('uid')))->select();
+        $temp =array();
+        if($one[0]){
+            foreach ($one as $k=>$v){
+               $user= $menber->where(array('fid'=>$v['uid']))->select();
+               foreach ($user as $value){
+                   $temp[] =$value;
+               }
+            }
+        }
+        $this->assign('one',$one);
+        $this->assign('two',$temp);
+        $this->display();
     }
 
    //主页
@@ -53,7 +140,7 @@ class IndexController extends CommonController {
         $this->assign('cangkuproducr',$cangkuproducr);
         $this->assign('diproduct',$diproduct);
         $this->assign('productlist',$productlist);
-        $this->assign('$cun',$cun['value']);
+        $this->assign('cun',$cun['value']);
 		$this->display();
 	}
 
