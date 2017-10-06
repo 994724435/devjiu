@@ -33,6 +33,10 @@ class IndexController extends CommonController {
     }
 
 
+    public function friend(){
+        
+    }
+
    //主页
 	public function index(){
         // 1仓库中 2收益中
@@ -271,23 +275,6 @@ class IndexController extends CommonController {
     }
 
 
-    // 1首页 2公告 3值班团队 4分析专家 5公司简介  gruop
-
-    public function types(){
-        $type = isset($_GET['type']) ? $_GET['type']: 2 ;
-        if($type ==2){
-            $title = "公告列表";
-        }elseif ($type == 3){
-            $title = "值班团队";
-        }elseif ($type == 4){
-            $title = "分析专家";
-        }
-        $article =M('article');
-        $intro= $article->order('aid DESC')->where(array('type'=>$type))->select();
-        $this->assign('title',$title);
-        $this->assign('res',$intro);
-        $this->display();
-    }
 
     /**
 	 * 获取当前页面完整URL地址
