@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<title>我的下级</title>
+	<link rel="stylesheet" href="__ROOT__/Public/Home/css/aui.min.css">
+	<link rel="stylesheet" href="__ROOT__/Public/Home/css/style.css">
+	<script type="text/javascript" src="__ROOT__/Public/Home/js/aui.js"></script>
+	<style type="text/css">
+		table,tbody,tr{display: block;width: 100%;}
+		td{text-align: center;width: 33.3%;}
+		tr{padding:10px 0;border-bottom: 1px solid #eee;}
+	</style>
+</head>
+<body>
+    <header class="mui-bar mui-bar-nav">
+	  <a class="mui-icon mui-icon-left-nav mui-pull-left mui-action-back"></a>
+	  <h1 class="mui-title">我的下级</h1>
+	</header>
+	<div class="mui-content">
+		     <ul class="mui-table-view">
+				<li class="mui-table-view-divider">一级下线</li>
+			</ul>
+			<ul class="flex">
+				<li>会员账号</li>
+				<li>注册时间</li>
+			</ul>
+			<foreach name="one" item='v'>
+				<ul class="flex">
+					<li>{$v.name}</li>
+					<li class="time">{$v.addymd}</li>
+				</ul>
+			</foreach>
+			  <ul class="mui-table-view">
+				<li class="mui-table-view-divider">二级下线</li>
+			</ul>
+
+			<ul class="flex">
+				<li>会员账号</li>
+				<li>注册时间</li>
+			</ul>
+
+			<foreach name="two" item='v'>
+				<ul class="flex">
+					<li>{$v.name}</li>
+					<li class="time">{$v.addymd}</li>
+				</ul>
+			</foreach>
+			<!--<ul class="flex">-->
+				<!--<li>3333</li>-->
+				<!--<li class="time">2017-2-3</li>-->
+			<!--</ul>-->
+	</div>
+</body>
+</html>

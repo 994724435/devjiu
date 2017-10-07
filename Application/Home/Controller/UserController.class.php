@@ -5,75 +5,365 @@ use Think\Controller;
 header('content-type:text/html;charset=utf-8');
 class UserController extends CommonController{
 
-    public function cashDetail(){  //资金明细
-        $incomelog =M('incomelog');
-        $condtion['userid'] =session('uid');
-        $condtion['type']   =array('gt',0);
-        $res = $incomelog->order('id DESC')->where($condtion)->select();
-        $this->assign('res',$res);
-        $this->display();
-    }
+    public function transfer2(){
+        $menber =M('menber');
+        if($_POST['num'] > 0 ){
+            $otherinfo =$menber->where(array('tel'=>$_POST['tel']))->find();
+            if(!$otherinfo['uid']){
+                echo "<script>alert('用户不存在');";
+                echo "</script>";
+                $this->display();
+                exit();
+            }
 
-    public function my(){
-        $this->display();
-    }
+            $userinfo =$menber->where(array('uid'=>session('uid')))->select();
+            if($_POST['pwd2'] != $userinfo[0]['pwd2']){
+                echo "<script>alert('二级密码错误');";
+                echo "</script>";
+                $this->display();
+                exit();
+            }
 
-    public function rechargeEnd(){
-        $incomelog = M("incomelog");
-        $log = $incomelog->where(array('id'=>$_GET['id']))->select();
-        $this->assign('log',explode(',',$log[0]['cont']));
-        $this->display();
-    }
+            if($_POST['num'] > $userinfo[0]['dongbag']){
+                echo "<script>alert('激活票不足');";
+                echo "</script>";
+                $this->display();
+                exit();
+            }
+            $left =bcsub($userinfo[0]['dongbag'] ,$_POST['num'],2);
+            $menber->where(array('uid'=>session('uid')))->save(array('dongbag'=>$left));
 
-    public function buys(){
-        $incomelog = M("incomelog");
-        $log = $incomelog->where(array('id'=>$_GET['id']))->select();
-        $userinfo =M('menber')->where(array('uid'=>session('uid')))->select();
+            // 1收益 2充值 3静态提现  4动态体现  5 注册下级 6下单购买 7退本 8激活票转账 9酒票转账 10静态收益 11 动态收益 12售卖金币
+            $income =M('incomelog');
+            $logdata['type'] = 8 ;
+            $logdata['state'] =2 ;
+            $logdata['reson'] ='激活票转账' ;
+            $logdata['addymd'] =date('Y-m-d',time()) ;
+            $logdata['addtime'] =time() ;
+            $logdata['orderid'] = $otherinfo['uid'];
+            $logdata['userid'] =session('uid');
+            $logdata['income'] =$_POST['num'];
+            $income->add($logdata);
 
-        if($log[0]['userid'] == session('uid')){
-            echo "<script>alert('自己不能购买自己的挂卖');";
-            echo "window.location.href='".__ROOT__."/index.php/Home/User/rechargeInfo';";
+
+            $dongbug = bcadd($otherinfo['dongbag'] ,$_POST['num'],2);
+            $menber->where(array('uid'=>$otherinfo['uid']))->save(array('dongbag'=>$dongbug));
+            $logdata1['type'] = 2 ;
+            $logdata1['state'] =1 ;
+            $logdata1['reson'] ='激活票转账' ;
+            $logdata1['addymd'] =date('Y-m-d',time()) ;
+            $logdata1['addtime'] =time() ;
+            $logdata1['orderid'] =session('uid');
+            $logdata1['userid'] =$otherinfo['uid'];
+            $logdata1['income'] =$_POST['num'];
+            $income->add($logdata1);
+
+
+            echo "<script>alert('转账成功');";
+            echo "window.location.href='".__ROOT__."/index.php/Home/User/my';";
             echo "</script>";
             exit;
         }
 
-
-        //生成新纪录
-        $commitid = date("YmdHis").rand(1000,9999);
-        $log[0]['userid'] = session('uid');
-        $log[0]['commitid'] = $commitid;
-        $log[0]['orderid'] = 2;
-        $log[0]['state'] = 4;
-        unset($log[0]['id']);
-        $incomelog->add($log[0]);
-
-        $incomelog->where(array('id'=>$_GET['id']))->save(array('state'=>4,'orderid'=>1,'commitid'=>$commitid));
-
-        echo "<script>alert('购买成功');";
-        echo "window.location.href='".__ROOT__."/index.php/Home/User/rechargeInfo';";
-        echo "</script>";
-        exit;
+        $this->display();
     }
 
-    public function rechargeInfo(){
-        $incomelog = M("incomelog");
-        $log = $incomelog->order('id DESC')->where(array('type'=>12,'state'=>0))->select();
-        //查询待处理的结果
-        $map['state']  = array('gt',3);
-        $map['type']  = 12;
-        $map['userid']  = session('uid');
-        $nextlog =$incomelog->where($map)->select();
+    public function transfer1(){
+        $menber =M('menber');
+        if($_POST['num'] > 0 ){
+            $otherinfo =$menber->where(array('tel'=>$_POST['tel']))->find();
+            if(!$otherinfo['uid']){
+                echo "<script>alert('用户不存在');";
+                echo "</script>";
+                $this->display();
+                exit();
+            }
 
-        $this->assign('nextlog',$nextlog);
-        $this->assign('log',$log);
+            $userinfo =$menber->where(array('uid'=>session('uid')))->select();
+            if($_POST['pwd2'] != $userinfo[0]['pwd2']){
+                echo "<script>alert('二级密码错误');";
+                echo "</script>";
+                $this->display();
+                exit();
+            }
+
+            if($_POST['num'] > $userinfo[0]['chargebag']){
+                echo "<script>alert('酒票不足');";
+                echo "</script>";
+                $this->display();
+                exit();
+            }
+            $left =bcsub($userinfo[0]['chargebag'] ,$_POST['num'],2);
+            $menber->where(array('uid'=>session('uid')))->save(array('chargebag'=>$left));
+
+            // 1收益 2充值 3静态提现  4动态体现  5 注册下级 6下单购买 7退本 8激活票转账 9酒票转账 10静态收益 11 动态收益 12售卖金币
+            $income =M('incomelog');
+            $logdata['type'] = 9 ;
+            $logdata['state'] =2 ;
+            $logdata['reson'] ='酒票转账' ;
+            $logdata['addymd'] =date('Y-m-d',time()) ;
+            $logdata['addtime'] =time() ;
+            $logdata['orderid'] = $otherinfo['uid'];
+            $logdata['userid'] =session('uid');
+            $logdata['income'] =$_POST['num'];
+            $income->add($logdata);
+
+
+            $dongbug = bcadd($otherinfo['chargebag'] ,$_POST['num'],2);
+            $menber->where(array('uid'=>$otherinfo['uid']))->save(array('chargebag'=>$dongbug));
+            $logdata1['type'] = 9 ;
+            $logdata1['state'] =1 ;
+            $logdata1['reson'] ='酒票转账' ;
+            $logdata1['addymd'] =date('Y-m-d',time()) ;
+            $logdata1['addtime'] =time() ;
+            $logdata1['orderid'] =session('uid');
+            $logdata1['userid'] =$otherinfo['uid'];
+            $logdata1['income'] =$_POST['num'];
+            $income->add($logdata1);
+
+
+            echo "<script>alert('转账成功');";
+            echo "window.location.href='".__ROOT__."/index.php/Home/User/my';";
+            echo "</script>";
+            exit;
+        }
+
+        $this->display();
+    }
+
+    public function reg(){  //注册下级
+        if($_POST['tel']&&$_POST['pwd']){
+
+            if(preg_match("/^1[34578]{1}\d{9}$/",$_POST['tel'])){
+
+            }else{
+                echo "<script>alert('请用手机号码注册');";
+                echo "window.location.href='".__ROOT__."/index.php/Home/User/reg';";
+                echo "</script>";
+                exit;
+            }
+            if($_POST['pwd']!=$_POST['pwd1']){
+                echo "<script>alert('一级密码不一致');";
+                echo "window.location.href='".__ROOT__."/index.php/Home/User/reg';";
+                echo "</script>";
+                exit;
+            }
+
+            if($_POST['pwd2']!=$_POST['pwd21']){
+                echo "<script>alert('二级密码不一致');";
+                echo "window.location.href='".__ROOT__."/index.php/Home/User/reg';";
+                echo "</script>";
+                exit;
+            }
+
+            $menber =M('menber');
+            //  用户名
+            $res_user =$menber->where(array('tel'=>$_POST['tel']))->select();
+            if($res_user[0]){
+                echo "<script>alert('电话已存在');";
+                echo "window.location.href='".__ROOT__."/index.php/Home/User/reg';";
+                echo "</script>";
+                exit;
+            }
+            //  金额
+            $res_menber =$menber->where(array('uid'=>session('uid')))->select();
+            if($res_menber[0]['chargebag']<$_POST['jiupiao']){
+                echo "<script>alert('酒票余额不足');";
+                echo "window.location.href='".__ROOT__."/index.php/Home/User/reg';";
+                echo "</script>";
+                exit;
+            }
+
+            if($res_menber[0]['dongbag']<$_POST['jihuo']){
+                echo "<script>alert('激活票余额不足');";
+                echo "window.location.href='".__ROOT__."/index.php/Home/User/reg';";
+                echo "</script>";
+                exit;
+            }
+
+            $data['name'] =$_POST['username'];
+            $data['pwd'] =$_POST['pwd'];
+            $data['pwd2'] =$_POST['pwd2'];
+            $data['type'] =0;
+            $data['fuid'] =session('uid');
+            $data['addtime'] =date('Y-m-d H:i:s',time());
+            $data['addymd'] = date('Y-m-d',time());
+            $data['chargebag'] =$_POST['radio1'];
+            $data['incomebag'] =0;
+            $res =$menber->add($data);
+            if($res){
+                $chargebag =bcsub($res_menber[0]['chargebag'],$_POST['jiupiao'],2);
+                $jihuo =bcsub($res_menber[0]['dongbag'],$_POST['jihuo'],2);
+                $menber->where(array('uid'=>session('uid')))->save(array('chargebag'=>$chargebag,'dongbag'=>$jihuo));
+                // 上家金额记录
+//                $datas['state'] = 2;
+//                $datas['reson'] = "注册下级";
+//                $datas['type'] = 5;
+//                $datas['addymd'] = date('Y-m-d',time());
+//                $datas['addtime'] = date('Y-m-d H:i:s',time());
+//                $datas['orderid'] = $res;
+//                $datas['userid'] = session('uid');
+//                $datas['income'] = $_POST['radio1'];
+//                $this->savelog($datas);
+                //下家金额记录
+//                $data1['state'] = 1;
+//                $data1['reson'] = "注册收入";
+//                $data1['type'] = 1;
+//                $data1['addymd'] = date('Y-m-d',time());
+//                $data1['addtime'] = date('Y-m-d H:i:s',time());
+//                $data1['orderid'] = session('uid');     // 注册上家
+//                $data1['userid'] =$res;
+//                $data1['income'] = $_POST['radio1'];
+//                $this->savelog($data1);
+            }
+            echo "<script>alert('用户".$_POST['name']."注册成功');";
+            echo "window.location.href='".__ROOT__."/index.php/Home/User/reg';";
+            echo "</script>";
+            exit;
+
+        }
+
         $this->display();
     }
 
 
-    /*
-     * 个人资料
+    /**
+     *  转账
      */
-    public function my_data(){
+    public function transferto1()
+    {
+
+        if($_POST){
+            $menber =M('menber');
+            $res_user = $menber->where(array('uid'=>session('uid')))->select();
+
+            if($_POST['num']<=0){
+                echo "<script>alert('金额不正确');";
+                echo "window.location.href='".__ROOT__."/index.php/Home/User/transferto1';";
+                echo "</script>";
+                exit;
+            }
+
+            if($this->isdo(session('uid'))){
+                echo "<script>alert('今日已有操作记录');";
+                echo "window.location.href='".__ROOT__."/index.php/Home/User/transferto1';";
+                echo "</script>";
+                exit;
+            }
+
+            if($res_user[0]['pwd2']!=$_POST['pwd2']){
+                echo "<script>alert('二级密码不正确');";
+                echo "window.location.href='".__ROOT__."/index.php/Home/User/transferto1';";
+                echo "</script>";
+                exit;
+            }
+            $res_user1 = $menber->where(array('tel'=>$_POST['tel']))->select();
+
+            $less = bcmul($res_user[0]['chargebag'],0.2);
+            if($less < $_POST['num']){
+                echo "<script>alert('最大只能转20%');";
+                echo "window.location.href='".__ROOT__."/index.php/Home/User/transferto1';";
+                echo "</script>";
+                exit;
+            }
+
+            if(!$res_user1[0]['name']){
+                echo "<script>alert('账户不存在');";
+                echo "window.location.href='".__ROOT__."/index.php/Home/User/transferto1';";
+                echo "</script>";
+                exit;
+            }
+//            if($res_user[0]['chargebag'] <500){
+//                echo "<script>alert('金额不足500');";
+//                echo "window.location.href='".__ROOT__."/index.php/Home/User/my_data';";
+//                echo "</script>";
+//                exit;
+//            }
+
+//            if($res_user1[0]['name'] != $_POST['name']){
+//                echo "<script>alert('账户不正确');";
+//                echo "window.location.href='".__ROOT__."/index.php/Home/User/transfers_dong';";
+//                echo "</script>";
+//                exit;
+//            }
+
+            if($res_user[0]['chargebag']<$_POST['num']){
+                echo "<script>alert('充值钱包余额不足');";
+                echo "window.location.href='".__ROOT__."/index.php/Home/User/transferto1';";
+                echo "</script>";
+                exit;
+            }
+
+            if($res_user[0]['tel']==$_POST['tel']){
+                echo "<script>alert('自己不能给自己转账');";
+                echo "window.location.href='".__ROOT__."/index.php/Home/User/transferto1';";
+                echo "</script>";
+                exit;
+            }
+
+            //处理自己
+            $chargebagmy =bcsub($res_user[0]['chargebag'],$_POST['num'],2);
+            $lilv = bcmul($_POST['num'],0.03,2);
+            $chargebagmy =bcsub($chargebagmy,$lilv,2);
+
+            $menber->where(array('uid'=>session('uid')))->save(array('chargebag'=>$chargebagmy));
+            $income =M('incomelog');
+            $logdata['type'] = 9 ;
+            $logdata['state'] =2 ;
+            $logdata['reson'] ='现金钱包转账' ;
+            $logdata['addymd'] =date('Y-m-d',time()) ;
+            $logdata['addtime'] =time() ;
+            $logdata['orderid'] =$res_user1[0]['uid'] ;
+            $logdata['userid'] =session('uid');
+            $munmy = bcadd($_POST['num'],$lilv,2);
+            $logdata['income'] =$munmy;
+            $income->add($logdata);
+
+
+            //处理他人
+            $chargebaghim =bcadd($res_user1[0]['chargebag'],$_POST['num'],2);
+            $menber->where(array('uid'=>$res_user1[0]['uid']))->save(array('chargebag'=>$chargebaghim));
+
+
+            $logdata['type'] = 9;
+            $logdata['state'] =1 ;
+            $logdata['reson'] ='现金钱包转账' ;
+            $logdata['addymd'] =date('Y-m-d',time()) ;
+            $logdata['addtime'] =time();
+            $logdata['orderid'] =session('uid');
+            $logdata['userid'] =$res_user1[0]['uid'];
+            $logdata['income'] =$_POST['num'];
+            $income->add($logdata);
+
+            echo "<script>alert('转账成功');";
+            echo "window.location.href='".__ROOT__."/index.php/Home/User/my';";
+            echo "</script>";
+            exit;
+        }
+        $this->display();
+    }
+
+
+    public function group(){
+        $menber = M("menber");
+
+        $one =$menber->where(array('fuid'=>session('uid')))->select();
+
+        $temp =array();
+        if($one[0]){
+            foreach ($one as $k=>$v){
+                $user= $menber->where(array('fuid'=>$v['uid']))->select();
+                foreach ($user as $value){
+                    $temp[] =$value;
+                }
+            }
+        }
+        $this->assign('one',$one);
+        $this->assign('two',$temp);
+        $this->display();
+    }
+
+    public function my(){
         $this->display();
     }
 
@@ -153,62 +443,6 @@ class UserController extends CommonController{
         $this->display();
     }
 
-    /*
-    * 动态
-     */
-    public function dongtai(){
-        $incomelog =M('incomelog');
-        $con['userid'] = session('uid');
-        $con['type']   =array('in',array(4,9,11));
-
-        $res = $incomelog->where($con)->order(" id DESC ")->limit(18)->select();
-        $this->assign('res',$res);
-        $this->display();
-    }
-    
-
-
-    private function getflilv($count){
-        $configboj =M('config');
-        if($count > 1 && $count < 4){   // 1
-
-           $lilv =  $configboj->where(array('id'=>3))->select();
-           return $lilv[0]['value'];
-
-        }elseif ($count >3 && $count < 8){  // 2
-
-            $lilv =  $configboj->where(array('id'=>4))->select();
-            return $lilv[0]['value'];
-
-        }elseif ($count >7 && $count < 12){   // 3
-
-            $lilv =  $configboj->where(array('id'=>5))->select();
-            return $lilv[0]['value'];
-
-        }elseif ($count >11 && $count < 16){   // 4
-
-            $lilv =  $configboj->where(array('id'=>6))->select();
-            return $lilv[0]['value'];
-
-        }elseif ($count >15 && $count < 20){   // 5
-
-            $lilv =  $configboj->where(array('id'=>7))->select();
-            return $lilv[0]['value'];
-
-        }elseif ($count >20 && $count < 22){   // 6
-
-            $lilv =  $configboj->where(array('id'=>8))->select();
-            return $lilv[0]['value'];
-        }else{
-            return 0 ;
-        }
-    }
-
-    public function suBuyBi(){
-        $bi = 50;
-        $userid = 28;
-
-    }
 
 
     public function isTiXian($userid,$num){
@@ -236,80 +470,7 @@ class UserController extends CommonController{
 
 
     }
-    /*
-    * 我的团队
-     */
-    public function my_gruop(){
-        $menber = M("menber");
-        $p_incomelog =M('incomelog');
-        $con['userid'] = session('uid');
-        $con['type'] = 11;
-        $con['userid'] =session('uid');
-//        $con['type'] =array('in',array(10,11));
-        $result = $p_incomelog->where($con)->order('id DESC')->select();
-        foreach ($result as $k=>$v){
-//            $user = $menber->where(array('uid'=>$v['userid']))->select();
-//            $result[$k]['username'] =$user[0]['name'];
-            $times = 0;
-            $usrinfo = $menber->where(array('uid'=>$v['orderid']))->select();
-            $fids =array_reverse(explode(',',$usrinfo[0]['fuids']));
-            foreach ($fids as $key=>$val){
-                if($val == session('uid')){
-                    $times = $key ;
-                    break;
-                }
-            }
-            $result[$k]['times'] =$this->changeTimes($times);
-            // 上级编号
-//            $shang = M('orderlog')->where(array('userid'=>$usrinfo[0]['fuid']))->order('logid DESC')->select();
-            $result[$k]['shang'] =$usrinfo[0]['fuid'];
-        }
-//        print_r($result);die;
-        $this->assign('res',$result);
-        $this->display();
-    }
 
-    private function changeTimes($times){
-        if($times ==1 ){
-            return "一";
-        }elseif ($times ==2 ){
-            return "二";
-        }elseif ($times == 3){
-            return "三";
-        }elseif ($times == 4 ){
-            return "四";
-        }elseif ($times ==5 ){
-            return "五";
-        }elseif ($times ==6 ){
-            return "六";
-        }
-    }
-
-    function getMenuTree($arrCat, $parent_id = 0, $level = 0)
-    {
-        static  $arrTree = array(); //使用static代替global
-        if( empty($arrCat)) return FALSE;
-        $level++;
-        foreach($arrCat as $key => $value)
-        {
-            if($value['parent_id' ] == $parent_id)
-            {
-                $value[ 'level'] = $level;
-                $arrTree[] = $value;
-                unset($arrCat[$key]); //注销当前节点数据，减少已无用的遍历
-                getMenuTree($arrCat, $value[ 'id'], $level);
-            }
-        }
-
-        return $arrTree;
-    }
-
-    /*
-    * 客服
-    */
-    public function kefu(){
-        $this->display();
-    }
 
     /*
     * 静态体现
@@ -459,121 +620,6 @@ class UserController extends CommonController{
         }
     }
 
-    /**
-     *  转账
-     */
-    public function transferto1()
-    {
-
-        if($_POST){
-            $menber =M('menber');
-            $res_user = $menber->where(array('uid'=>session('uid')))->select();
-
-            if($_POST['num']<=0){
-                echo "<script>alert('金额不正确');";
-                echo "window.location.href='".__ROOT__."/index.php/Home/User/transferto1';";
-                echo "</script>";
-                exit;
-            }
-
-            if($this->isdo(session('uid'))){
-                echo "<script>alert('今日已有操作记录');";
-                echo "window.location.href='".__ROOT__."/index.php/Home/User/transferto1';";
-                echo "</script>";
-                exit;
-            }
-
-            if($res_user[0]['pwd2']!=$_POST['pwd2']){
-                echo "<script>alert('二级密码不正确');";
-                echo "window.location.href='".__ROOT__."/index.php/Home/User/transferto1';";
-                echo "</script>";
-                exit;
-            }
-            $res_user1 = $menber->where(array('tel'=>$_POST['tel']))->select();
-
-            $less = bcmul($res_user[0]['chargebag'],0.2);
-            if($less < $_POST['num']){
-                echo "<script>alert('最大只能转20%');";
-                echo "window.location.href='".__ROOT__."/index.php/Home/User/transferto1';";
-                echo "</script>";
-                exit;
-            }
-
-            if(!$res_user1[0]['name']){
-                echo "<script>alert('账户不存在');";
-                echo "window.location.href='".__ROOT__."/index.php/Home/User/transferto1';";
-                echo "</script>";
-                exit;
-            }
-//            if($res_user[0]['chargebag'] <500){
-//                echo "<script>alert('金额不足500');";
-//                echo "window.location.href='".__ROOT__."/index.php/Home/User/my_data';";
-//                echo "</script>";
-//                exit;
-//            }
-
-//            if($res_user1[0]['name'] != $_POST['name']){
-//                echo "<script>alert('账户不正确');";
-//                echo "window.location.href='".__ROOT__."/index.php/Home/User/transfers_dong';";
-//                echo "</script>";
-//                exit;
-//            }
-
-            if($res_user[0]['chargebag']<$_POST['num']){
-                echo "<script>alert('充值钱包余额不足');";
-                echo "window.location.href='".__ROOT__."/index.php/Home/User/transferto1';";
-                echo "</script>";
-                exit;
-            }
-
-            if($res_user[0]['tel']==$_POST['tel']){
-                echo "<script>alert('自己不能给自己转账');";
-                echo "window.location.href='".__ROOT__."/index.php/Home/User/transferto1';";
-                echo "</script>";
-                exit;
-            }
-
-            //处理自己
-            $chargebagmy =bcsub($res_user[0]['chargebag'],$_POST['num'],2);
-            $lilv = bcmul($_POST['num'],0.03,2);
-            $chargebagmy =bcsub($chargebagmy,$lilv,2);
-
-            $menber->where(array('uid'=>session('uid')))->save(array('chargebag'=>$chargebagmy));
-            $income =M('incomelog');
-            $logdata['type'] = 9 ;
-            $logdata['state'] =2 ;
-            $logdata['reson'] ='现金钱包转账' ;
-            $logdata['addymd'] =date('Y-m-d',time()) ;
-            $logdata['addtime'] =time() ;
-            $logdata['orderid'] =$res_user1[0]['uid'] ;
-            $logdata['userid'] =session('uid');
-            $munmy = bcadd($_POST['num'],$lilv,2);
-            $logdata['income'] =$munmy;
-            $income->add($logdata);
-
-
-            //处理他人
-            $chargebaghim =bcadd($res_user1[0]['chargebag'],$_POST['num'],2);
-            $menber->where(array('uid'=>$res_user1[0]['uid']))->save(array('chargebag'=>$chargebaghim));
-
-
-            $logdata['type'] = 9;
-            $logdata['state'] =1 ;
-            $logdata['reson'] ='现金钱包转账' ;
-            $logdata['addymd'] =date('Y-m-d',time()) ;
-            $logdata['addtime'] =time();
-            $logdata['orderid'] =session('uid');
-            $logdata['userid'] =$res_user1[0]['uid'];
-            $logdata['income'] =$_POST['num'];
-            $income->add($logdata);
-
-            echo "<script>alert('转账成功');";
-            echo "window.location.href='".__ROOT__."/index.php/Home/User/my';";
-            echo "</script>";
-            exit;
-        }
-        $this->display();
-    }
 
 
     /**
@@ -675,139 +721,10 @@ class UserController extends CommonController{
     }
 
 
-
-
-
-
-    public function regNext(){  //注册下级
-        if($_POST['name']&&$_POST['pwd']){
-            if(preg_match("/^1[34578]{1}\d{9}$/",$_POST['name'])){
-
-            }else{
-                echo "<script>alert('请用手机号码注册');";
-                echo "window.location.href='".__ROOT__."/index.php/Home/User/regNext';";
-                echo "</script>";
-                exit;
-            }
-//            if($_POST['pwd']!=$_POST['pwd1']){
-//                echo "<script>alert('密码不一致');";
-//                echo "window.location.href='".__ROOT__."/index.php/Home/User/regNext';";
-//                echo "</script>";
-//                exit;
-//            }
-            $menber =M('menber');
-            //  用户名
-            $res_user =$menber->where(array('name'=>$_POST['name']))->select();
-            if($res_user[0]){
-                echo "<script>alert('用户名已存在');";
-                echo "window.location.href='".__ROOT__."/index.php/Home/User/regNext';";
-                echo "</script>";
-                exit;
-            }
-            //  金额
-            $res_menber =$menber->where(array('uid'=>session('uid')))->select();
-            if($res_menber[0]['recast']<$_POST['radio1']){
-                echo "<script>alert('复投钱包余额不足');";
-                echo "window.location.href='".__ROOT__."/index.php/Home/User/regNext';";
-                echo "</script>";
-                exit;
-            }
-            $data['name'] =$_POST['name'];
-            $data['pwd'] =$_POST['pwd'];
-            $data['pwd2'] =$_POST['pwd1'];
-            $data['type'] =0;
-            $data['fuid'] =session('uid');
-            $data['addtime'] =date('Y-m-d H:i:s',time());
-            $data['addymd'] = date('Y-m-d',time());
-            $data['chargebag'] =$_POST['radio1'];
-            $data['incomebag'] =0;
-            $res =$menber->add($data);
-            if($res){
-//                $chargebag =$res_menber[0]['chargebag']-$_POST['radio1'];
-                $chargebag =bcsub($res_menber[0]['recast'],$_POST['radio1'],2);
-                $menber->where(array('uid'=>session('uid')))->save(array('recast'=>$chargebag));
-                // 上家金额记录
-//                $datas['state'] = 2;
-//                $datas['reson'] = "注册下级";
-//                $datas['type'] = 5;
-//                $datas['addymd'] = date('Y-m-d',time());
-//                $datas['addtime'] = date('Y-m-d H:i:s',time());
-//                $datas['orderid'] = $res;
-//                $datas['userid'] = session('uid');
-//                $datas['income'] = $_POST['radio1'];
-//                $this->savelog($datas);
-                //下家金额记录
-                $data1['state'] = 1;
-                $data1['reson'] = "注册收入";
-                $data1['type'] = 1;
-                $data1['addymd'] = date('Y-m-d',time());
-                $data1['addtime'] = date('Y-m-d H:i:s',time());
-                $data1['orderid'] = session('uid');     // 注册上家
-                $data1['userid'] =$res;
-                $data1['income'] = $_POST['radio1'];
-                $this->savelog($data1);
-            }
-            echo "<script>alert('用户".$_POST['name']."注册成功');";
-            echo "window.location.href='".__ROOT__."/index.php/Home/User/regNext';";
-            echo "</script>";
-            exit;
-
-        }
-
-        $this->display();
-    }
-
-
     private function savelog($data){
         $incomelog =M('incomelog');
         return $incomelog->add($data);
     }
-
-
-    public function payRecord(){  //充值记录
-        $incomelog =M('incomelog');
-        $condtion['userid'] =session('uid');
-        $condtion['type']=2;
-        $condtion['state']=1;
-        $res = $incomelog->order('id DESC')->where($condtion)->select();
-        $this->assign('res',$res);
-        $this->display();
-    }
-
-    public function cancel(){
-        $incomelog =M('incomelog');
-        $condtion['uid'] =session('uid');
-        $condtion['id']  =$_GET['id'];
-        $res = $incomelog->where($condtion)->select();
-        $income =$res[0]['income'];
-        if($income<=0){
-            echo "<script>alert('取消失败');";
-            echo "window.location.href='".__ROOT__."/index.php/Home/User/cashRecord';";
-            echo "</script>";
-            exit;
-        }
-        $menber =M('menber');
-        $useinfo = $menber->where(array('uid'=>session('uid')))->select();
-//        $res_usermoney = $useinfo[0]['incomebag']+$income;
-        $res_usermoney = bcadd($useinfo[0]['incomebag'],$income,2);
-        $menber->where(array('uid'=>session('uid')))->save(array('incomebag'=>$res_usermoney));
-        $incomelog->where(array('id'=>$_GET['id']))->save(array('state'=>3));
-        echo "<script>alert('操作成功');";
-        echo "window.location.href='".__ROOT__."/index.php/Home/User/cashRecord';";
-        echo "</script>";
-        exit;
-    }
-
-    public function cashRecord(){  //提现记录
-        $incomelog =M('incomelog');
-        $condtion['userid'] =session('uid');
-        $condtion['type']=3;
-//        $condtion['state']=2;
-        $res = $incomelog->order('id DESC')->where($condtion)->select();
-        $this->assign('res',$res);
-        $this->display();
-    }
-
 
 
     public function switchMoney(){  //钱包互转
@@ -947,42 +864,4 @@ class UserController extends CommonController{
         $this->display();
     }
 
-    public function touch(){
-        $type = isset($_GET['type']) ? $_GET['type'] : 1 ;
-        if($type==1){
-            $filename = "kefu.jpg";
-            $msg = "联系客服";
-        }else{
-            $msg = "联系客服";
-            $filename = "kefu.jpg";
-        }
-        $this->assign('msg',$msg);
-        $this->assign('filename',$filename);
-        $this->display();
-    }
-
-    public function inputnum(){
-        if($_POST['num'] > 0){
-            echo "<script>";
-            echo "window.location.href='".__ROOT__."/index.php/Home/Pay/getQrCode/money/".$_POST['num']."';";
-            echo "</script>";
-            exit;
-        }
-        $this->display();
-    }
-
-    public function inputzhifu(){
-        echo "<script>alert('支付宝暂未开通');";
-        echo "window.location.href='".__ROOT__."/index.php/Home/User/my';";
-        echo "</script>";
-        exit;
-
-        if($_POST['num'] > 0){
-            echo "<script>";
-            echo "window.location.href='".__ROOT__."/index.php/Home/User/recharge/money/".$_POST['num']."';";
-            echo "</script>";
-            exit;
-        }
-        $this->display();
-    }
 }

@@ -1,147 +1,216 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>公司首页</title>
-    <link rel="stylesheet" type="text/css" href="http://at.alicdn.com/t/font_411407_ow1bd2r17k62mx6r.css">
-	<link href="https://cdn.bootcss.com/Swiper/3.4.2/css/swiper.min.css" rel="stylesheet">
-	<script src="https://cdn.bootcss.com/Swiper/3.4.2/js/swiper.min.js"></script>
-	<link href="__ROOT__/Public/Home/css/bootstrap.min.css" rel="stylesheet">
-	<link href="__ROOT__/Public/Home/css/aui.min.css" rel="stylesheet">
-	<link href="__ROOT__/Public/Home/css/mui.picker.css" rel="stylesheet">
-	<link href="__ROOT__/Public/Home/css/mui.poppicker.css" rel="stylesheet">
-	<link href="__ROOT__/Public/Home/css/style.css" rel="stylesheet">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<script type="text/javascript" src="__ROOT__/Public/Home/js/fontSize.js"></script>
 	<script type="text/javascript" src="__ROOT__/Public/Home/js/jquery-3.1.1.min.js"></script>
-	<script type="text/javascript" src="__ROOT__/Public/Home/js/aui.js"></script>
-	<script type="text/javascript" src="__ROOT__/Public/Home/js/mui.picker.js"></script>
-	<script type="text/javascript" src="__ROOT__/Public/Home/js/mui.poppicker.js"></script>
-	<script type="text/javascript" src="__ROOT__/Public/Home/js/bootstrap.min.js"></script>
-	<style type="text/css">
-		.indexList>li{width: 85%;border-radius: 10px;height: 120px;margin:0 auto 30px;position: relative;}
-		.indexList>li:nth-child(3n+1){background: #24abe3;}
-		.indexList>li:nth-child(3n+2){background: #832d98;}
-		.indexList>li:nth-child(3n+3){background: #feb848;}
-		.indexList>li .iconfont{font-size: 83px;color: #fff;position: absolute;top: 30px;left: 20px;}
-	   .item li{color: #fff;font-size: 20px;}
-	   .item{float: right;margin-top: 38px;margin-right: 20px;}
-	   .item li.text{font-size: 14px;}
-	   .indexList>li .icon-qianbao,.indexList>li .icon-jindu,.indexList>li .icon-jiaoyi,.indexList>li .icon-zoushituacito{font-size: 70px;top: 52px;}
-	</style>
+	<script type="text/javascript" src="__ROOT__/Public/Home/js/index.js?v=2"></script>
+	<link rel="stylesheet" type="text/css" href="__ROOT__/Public/Home/css/aui.min.css">
+	<link rel="stylesheet" type="text/css" href="__ROOT__/Public/Home/css/style.css?v=1">
+	<title>酒模式</title>
 </head>
-<body>
-<!-- 公共头部 -->
-<include file="Common/header" />
+<body class="indexBg">
+<ul class="lands">
+	<foreach name="land" item='v'>
+	<li class="land land{$v.num}" style="background: url(__ROOT__/Public/Home/img/p_2.png) no-repeat;" data-land="{$v.num}">
+		<if condition="$v.state eq 1">
+			<img src="__ROOT__/Public/Home/img/p_3.png" alt="" class="jiuTong">
+		</if>
+	</li>
+	</foreach>
 
-<!-- 公共头部 -->
-<div class="container-fluid noPadding">
-	<!--<img src="__ROOT__/Public/Home/images/1.jpg" alt="" class="img-responsive" alt="Responsive image" style="margin-top: -20px;">-->
-	<!--<div class="introduce" style="padding:0 10px;">-->
-		<!--{$intro.cont}-->
-	<!--</div>-->
-	<!-- <ul class="nav grid"  id="myGRid" style="margin-top: 10px">
-		<li>
-			<a href="__ROOT__/index.php/Home/Index/introduce.html">
-				<div class="iconImgDiv"><img src="__ROOT__/Public/Home/images/mif/p_10.jpg" alt="" class="iconImg"></div>
-				<div class="gridText">公司简介</div>
-			</a>
-		</li>
-		<li>
-			<a href="__ROOT__/index.php/Home/Index/types/type/2">
-				<div class="iconImgDiv"><img src="__ROOT__/Public/Home/images/mif/p_20.png" alt="" class="iconImg"></div>
-				<div class="gridText">公司公告</div>
-			</a>
-		</li>
-		<li>
-			<a href="__ROOT__/index.php/Home/Index/K.html">
-				<div class="iconImgDiv"><img src="__ROOT__/Public/Home/images/mif/p_1.png" alt="" class="iconImg"></div>
-				<div class="gridText">同步k线图</div>
-			</a>
-		</li>
-		<li>
-			<a href="__ROOT__/index.php/Home/Index/types/type/3">
-				<div class="iconImgDiv"><img src="__ROOT__/Public/Home/images/mif/p_17.jpg" alt="" class="iconImg"></div>
-				<div class="gridText">值班团队</div>
-			</a>
-		</li>
-		<li>
-			<a href="__ROOT__/index.php/Home/Index/types/type/4">
-				<div class="iconImgDiv"><img src="__ROOT__/Public/Home/images/mif/p_5.png" alt="" class="iconImg"></div>
-				<div class="gridText">分析专家</div>
-			</a>
-		</li>
-		<li>
-			<a href="__ROOT__/index.php/Home/User/my.html">
-				<div class="iconImgDiv"><img src="__ROOT__/Public/Home/images/mif/p_7.png" alt="" class="iconImg"></div>
-				<div class="gridText">个人中心</div>
-			</a>
-		</li>
-		<li>
-			<a href="__ROOT__/index.php/Home/Index/gongpai.html">
-				<div class="iconImgDiv"><img src="__ROOT__/Public/Home/images/mif/p_9.png" alt="" class="iconImg"></div>
-				<div class="gridText">MIF公排</div>
-			</a>
-		</li>
-		<li>
-			<a href="__ROOT__/index.php/Home/Index/share/id/{$username.uid}">
-				<div class="iconImgDiv"><img src="__ROOT__/Public/Home/images/mif/p_6.png" alt="" class="iconImg"></div>
-				<div class="gridText">MIF分享</div>
-			</a>
-		</li>
-		<li>
-			<a href="__ROOT__/index.php/Home/Login/login">
-				<div class="iconImgDiv"><img src="__ROOT__/Public/Home/images/mif/p_15.png" alt="" class="iconImg"></div>
-				<div class="gridText">退出登录</div>
-			</a>
-		</li>
-	</ul> -->
-	<!-- <video autoplay="autoplay" src="__ROOT__/Public/Home/images/video.mp4" controls="controls">
-		您的浏览器不支持 video 标签。
-	</video> -->
-	<ul class="indexList">
-		<li>
-			<i class="iconfont icon-renshu-copy"></i>
-			<ul class="item">
-				<li>{$nextmenber}</li>
-				<li class="text">推荐人数</li>
+</ul>
+<ul class="operation">
+	<li  class="cangku">
+		<img src="__ROOT__/Public/Home/img/tab/cang.png" alt="">
+		<span>仓库</span>
+	</li>
+	<li class="cai" onclick="location.href='cashDetail.html'">
+		<img src="__ROOT__/Public/Home/img/tab/shouhuo.png" alt="">
+		<span>明细</span>
+	</li>
+	<!-- <li onclick="location.href='friend.html';">
+        <img src="__ROOT__/Public/Home/img/tab/friend.png" alt="" class="">
+        <span>好友</span>
+    </li> -->
+	<li class="store" id="store">
+		<img src="__ROOT__/Public/Home/img/tab/shop1.png" alt="">
+		<span>商店</span>
+	</li>
+	<li class="store" onclick="location.href='__ROOT__/index.php/Home/Message/mailBox.html'">
+		<img src="__ROOT__/Public/Home/img/tab/mail.png" alt="">
+		<span>邮箱</span>
+	</li>
+	<li onclick="location.href='__ROOT__/index.php/Home/User/my.html';">
+		<img src="__ROOT__/Public/Home/img/tab/my.png" alt="" class="">
+		<span>我的</span>
+	</li>
+</ul>
+
+<!-- 商店弹窗 -->
+<div class="shadow_mask" id="shopShow">
+	<div class="model"></div>
+	<div class="maskContent" id="shopMask">
+		<div class="main_pop_head">
+			<span class="main_return"></span>
+			<span>商店</span>
+			<img src="__ROOT__/Public/Home/img/x.png" alt="" class="closeImg">
+		</div>
+
+		<foreach name="productlist" item='v'>
+		<ul class="maskList">
+			<li>
+				<img src="__ROOT__/Public/Home/img/p_3.png" alt="">
+				<ul>
+					<li>{$v.name}：{$v.cont}</li>
+					<li>￥{$v.price}</li>
+				</ul>
+				<span class="buySpan" data-money="{$v.price}" data-id="{$v.id}">购买</span>
+			</li>
+		</ul>
+		</foreach>
+	</div>
+	<!-- 购买弹窗 -->
+	<div class="maskContent hidden" id="shopMask1">
+		<div class="main_pop_head">
+			<img src="__ROOT__/Public/Home/img/return.png" alt="" class="returnImg">
+			<span>确认购买</span>
+			<img src="__ROOT__/Public/Home/img/x.png" alt="" class="closeImg">
+		</div>
+		<form action="__ROOT__/index.php/Home/Index/buyProduct" method="post"  enctype="multipart/form-data">
+			<input type="hidden" name="goodsMoney" id="goodsMoney">
+			<input type="hidden" name="goodsId" id="goodsId">
+			<ul>
+				<li class="main_com_li">
+					<span class="main_com_li_left">库存:</span>
+					<input type="text" name="kucun" disabled="disabled" value="500">
+				</li>
+				<li class="main_com_li">
+					<span class="main_com_li_left">购买数量:</span>
+					<input type="number" name="num" value="1">
+				</li>
 			</ul>
-		</li>
-		<li>
-			<i class="iconfont icon-qianbao"></i>
-			<ul class="item">
-				<li>{$username.chargebag}</li>
-				<li class="text">现金钱包</li>
+			<button type="button" class="shippAddress">填写收货地址</button>
+			<button type="submit" class="confirm">确认购买</button>
+		</form>
+	</div>
+	<!-- 购买弹窗end -->
+
+	<!-- 收货地址弹窗 -->
+	<div class="maskContent" id="adressMask">
+		<div class="main_pop_head">
+			<img src="__ROOT__/Public/Home/img/return.png" alt="" class="returnImg">
+			<span>填写收货地址</span>
+			<img src="__ROOT__/Public/Home/img/x.png" alt="" class="closeImg">
+		</div>
+		<form action="__ROOT__/index.php/Home/Index/buyProduct"  method="post"  enctype="multipart/form-data">
+
+			<ul>
+				<li class="main_com_li">
+					<span class="main_com_li_left">收货人地址:</span>
+					<input type="text" name="addr">
+				</li>
+				<li class="main_com_li">
+					<span class="main_com_li_left">收货人姓名:</span>
+					<input type="text" name="username">
+				</li>
+				<li class="main_com_li">
+					<span class="main_com_li_left">收货人电话:</span>
+					<input type="text" name="tel">
+				</li>
+				<li class="main_com_li">
+					<span class="main_com_li_left">当前运费:</span>
+					<input type="text" name="yunfei" value="5" disabled="disabled">
+				</li>
+				<li class="main_com_li">
+					<span class="main_com_li_left">邮编:</span>
+					<input type="text" name="youbian">
+				</li>
+				<div class="code_tip">请扫描下方二维码支付运费</div>
+				<img src="__ROOT__/Public/Home/img/code.jpg" alt="" class="codeimg">
 			</ul>
-		</li>
-		<li>
-			<i class="iconfont icon-jindu"></i>
-			<ul class="item">
-				<li>{$username.mif}</li>
-				<li class="text">复投的进度</li>
-			</ul>
-		</li>
-		<li>
-			<i class="iconfont icon-jiaoyi"></i>
-			<ul class="item">
-				<li>{$income}</li>
-				<li class="text">交易大厅</li>
-			</ul>
-		</li>
-		<li>
-			<i class="iconfont icon-zoushituacito"></i>
-			<ul class="item">
-				<li>{$lilv}</li>
-				<li class="text">k线图拆分率</li>
-			</ul>
-		</li>
-	</ul>
+
+			<button type="button" class="confirm">确认购买</button>
+		</form>
+	</div>
+	<!-- 收货地址弹窗end -->
 
 </div>
+<!-- 商店弹窗end -->
 
-<script>
-  
+
+
+
+
+
+
+
+<!-- 仓库弹窗 -->
+<div class="shadow_mask" id="houseShow">
+	<div class="model"></div>
+	<div class="houseContent">
+		<div class="main_pop_head">
+			<span class="main_return"></span>
+			<span>仓库</span>
+			<img src="__ROOT__/Public/Home/img/x.png" alt="" class="closeImg">
+		</div>
+		<ul class="maskList">
+			<li>
+				<img src="__ROOT__/Public/Home/img/p_3.png" alt="">
+				<ul>
+					<li>土豆：大米大米</li>
+					<li>数量：1</li>
+				</ul>
+				<span class="useSpan" data-id="0">使用</span>
+			</li>
+			<li>
+				<img src="__ROOT__/Public/Home/img/p_4.png" alt="">
+				<ul>
+					<li>小麦：对对对</li>
+					<li>数量：1</li>
+				</ul>
+				<span class="useSpan" data-id="0">使用</span>
+			</li>
+
+		</ul>
+	</div>
+</div>
+<!-- 仓库弹窗 -->
+<!-- 仓库弹窗 -->
+<div class="shadow_mask" id="houseShow1">
+	<div class="model"></div>
+	<div class="houseContent">
+		<div class="main_pop_head">
+			<span class="main_return"></span>
+			<span>仓库</span>
+			<img src="__ROOT__/Public/Home/img/x.png" alt="" class="closeImg">
+		</div>
+		<ul class="maskList">
+			<li>
+				<img src="__ROOT__/Public/Home/img/p_3.png" alt="">
+				<ul>
+					<li>土豆：大米大米</li>
+					<li>数量：1</li>
+				</ul>
+				<span class="useSpan" data-id="0">使用</span>
+			</li>
+			<li>
+				<img src="__ROOT__/Public/Home/img/p_4.png" alt="">
+				<ul>
+					<li>小麦：对对对</li>
+					<li>数量：1</li>
+				</ul>
+				<span class="useSpan" data-id="0">使用</span>
+			</li>
+		</ul>
+	</div>
+</div>
+<input type="hidden" id="landId">
+<!-- 仓库弹窗 -->
+<script type="text/javascript">
+    $('body').height($(window).height());
+
 </script>
 </body>
-
 </html>

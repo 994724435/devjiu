@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<meta charset="UTF-8">
+	<title>注册新用户</title>
+	<link rel="stylesheet" href="__ROOT__/Public/Home/css/aui.min.css">
+	<link rel="stylesheet" type="text/css" href="__ROOT__/Public/Home/css/style.css">
+	<script type="text/javascript" src="__ROOT__/Public/Home/js/aui.js"></script>
+	<script type="text/javascript" src="__ROOT__/Public/Home/js/jquery-3.1.1.min.js"></script>
+	<script type="text/javascript" src="__ROOT__/Public/Home/js/fontSize.js"></script>
+	<style type="text/css">
+		.mui-input-row label{font-size: 14px;padding: 11px 7px;}
+		.mui-input-row label~input{font-size: 14px;}
+		input[type="text"]:disabled{color: #666;}
+	</style>
+</head>
+<body>
+	<header class="mui-bar mui-bar-nav">
+	  <a class="mui-icon mui-icon-left-nav mui-pull-left mui-action-back"></a>
+	  <h1 class="mui-title">注册新用户</h1>
+	</header>
+	<div class="mui-content">
+		<form class="mui-input-group" style="margin-top: 20px;" method="post"  enctype="multipart/form-data">
+		    <div class="mui-input-row">
+		        <label>推荐人账号</label>
+		        <input type="text" class="mui-input-clear" placeholder="推荐人账号" disabled="disabled" value="{$username.tel}">
+		    </div>
+		    <div class="mui-input-row">
+		        <label>当前酒票余额</label>
+		        <input type="text" class="mui-input-clear" placeholder="当前酒票余额" disabled="disabled" value="{$username.chargebag}">
+		    </div>
+			<div class="mui-input-row">
+				<label>当前激活票余额</label>
+				<input type="text" class="mui-input-clear" placeholder="当前激活票余额" disabled="disabled" value="{$username.dongbag}">
+			</div>
+
+		    <div class="mui-input-row">
+		        <label>注册消耗酒票</label>
+		        <input type="text" class="mui-input-clear" name="jiupiao" placeholder="注册消耗酒票" readonly="true"  value="100">
+		    </div>
+
+		     <div class="mui-input-row">
+		        <label>注册消耗激活票</label>
+		        <input type="text" class="mui-input-clear" name="jihuo"  placeholder="注册消耗激活票" readonly="true" value="100">
+		    </div>
+		    <div class="mui-input-row">
+		        <label>手机用户名</label>
+		        <input type="text" class="mui-input-clear" name="tel" placeholder="手机用户名">
+		    </div>
+		    <div class="mui-input-row">
+		        <label>真实姓名</label>
+		        <input type="text" class="mui-input-clear" name="username" placeholder="真实姓名">
+		    </div>
+		     <div class="mui-input-row">
+		        <label>一级密码</label>
+		        <input type="password" class="mui-input-password" name="pwd" placeholder="一级密码">
+		    </div>
+		    <div class="mui-input-row">
+		        <label>确认一级密码</label>
+		        <input type="password" class="mui-input-password" name="pwd1" placeholder="确认一级密码">
+		    </div>
+		    <div class="mui-input-row">
+		        <label>二级密码</label>
+		        <input type="password" class="mui-input-password" name="pwd2" placeholder="二级密码">
+		    </div>
+		    <div class="mui-input-row">
+		        <label>确认二级密码</label>
+		        <input type="password" class="mui-input-password" name="pwd21" placeholder="确认二级密码">
+		    </div>
+		    <button type="submit" class="mui-btn mui-btn-block">确认注册</button>
+		</form>
+	</div>
+</body>
+</html>

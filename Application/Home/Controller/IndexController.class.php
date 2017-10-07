@@ -106,37 +106,36 @@ class IndexController extends CommonController {
         $this->display();
     }
 
-    public function group(){
-        $menber = M("menber");
 
-        $one =$menber->where(array('fid'=>session('uid')))->select();
-        $temp =array();
-        if($one[0]){
-            foreach ($one as $k=>$v){
-               $user= $menber->where(array('fid'=>$v['uid']))->select();
-               foreach ($user as $value){
-                   $temp[] =$value;
-               }
+    // 补充地面
+    private function pushland($userid){
+        $lands = M("land")->where(array('uid'=>$userid))->find();
+        if(!$lands['uid']){
+            for ($i=1;$i <16;$i++){
+                $data['num'] =$i;
+                $data['uid'] =$userid;
+                M("land")->add($data);
             }
         }
-        $this->assign('one',$one);
-        $this->assign('two',$temp);
-        $this->display();
     }
 
    //主页
 	public function index(){
         // 1仓库中 2收益中
         $product = M("product");
-        $cangkuproducr =  $product->where(array('userid'=>session('uid'),'states'=>2))->select();
-        $diproduct =$product->where(array('userid'=>session('uid'),'states'=>1))->select();
+        $productlog =M("orderlog");
+        $cangkuproducr =  $productlog->where(array('userid'=>session('uid'),'states'=>2))->select();
+        $diproduct =$productlog->where(array('userid'=>session('uid'),'states'=>1))->select();
+
+        $land = M("land")->where(array('uid'=>session('uid')))->select();
 
         //商店
-        $productlist = $product->where(array('state'=>1))->select();
+        $productlist = $product->where(array('state'=>1))->order('id asc')->select();
 
         //库存
         $cun  =M("config")->where(array('id'=>3))->find();
 
+        $this->assign('land',$land);
         $this->assign('cangkuproducr',$cangkuproducr);
         $this->assign('diproduct',$diproduct);
         $this->assign('productlist',$productlist);
@@ -144,9 +143,17 @@ class IndexController extends CommonController {
 		$this->display();
 	}
 
+	public function cashDetail(){
+
+        $incomelog =M('incomelog');
+        $condtion['userid'] =session('uid');
+        $condtion['type']   =array('gt',0);
+        $res = $incomelog->order('id DESC')->where($condtion)->select();
+        $this->assign('res',$res);
+        $this->display();
+    }
+
     public function buyProduct(){
-        $config =M("config")->where(array('id'=>1))->select();
-        $bi =$config[0]['value'];
         if($_POST['num'] > 0){
             if(!is_numeric($_POST['num'])){
                 echo "<script>alert('请不要输入非法字符');";
@@ -154,10 +161,12 @@ class IndexController extends CommonController {
                 echo "</script>";
                 exit;
             }
+
             $menber = M("menber");
             $userinfo = $menber->where(array('uid'=>session('uid')))->select();
-            $id = $_POST['id'];
+            $id = $_POST['goodsId'];
             $product =M("product")->where(array('id'=>$id))->find();
+            $lefts = $product['left'] -$_POST['num'];
             if($product['left'] < $_POST['num']){
                     echo "<script>alert('库存不足');";
                     echo "window.location.href='".__ROOT__."/index.php/Home/Index/index';";
@@ -197,7 +206,7 @@ class IndexController extends CommonController {
 //                exit;
 //            }
 
-            $needmoney =bcmul($_POST['num'],$bi);
+            $needmoney =bcmul($_POST['num'],$_POST['goodsMoney']);
 
             $userallmoney =$userinfo[0]['chargebag'];
             if($userallmoney < $needmoney){
@@ -217,7 +226,7 @@ class IndexController extends CommonController {
                     echo "</script>";
                     exit;
                 }
-                // MIF 增加
+                // 下单
                 $mif = $userinfo[0]['mif'] + $_POST['num'];
                 $menber->where(array('uid'=>session('uid')))->save(array('mif'=>$mif));
                 $income =M('incomelog');
@@ -230,7 +239,7 @@ class IndexController extends CommonController {
                 $data['userid'] =session('uid');
                 $data['income'] =$needmoney;
 
-                $income->add($data);
+                $out = $income->add($data);
                 $resreson ="购买成功";
                 $orderid =  date("YmdHis").rand(1000,9999);
                 for($i=0;$i<$_POST['num'];$i++){
@@ -238,7 +247,9 @@ class IndexController extends CommonController {
                     $order['productid'] =$id ;
                     $order['productname'] =$product['name'];
                     $order['productmoney'] = $product['name'];
+                    $order['pic'] = $product['pic'];
                     $order['states'] = 1;
+                    $order['out'] = $out;
                     $order['orderid'] =$orderid;
                     $order['addtime'] = time();
                     $order['addymd'] = date("Y-m-d",time());
@@ -297,7 +308,7 @@ class IndexController extends CommonController {
 //                    }
 //
 //                }
-
+                M("product")->where(array('id'=>$id))->save(array('left'=>$lefts));
                 echo "<script>alert('购买成功');";
                 echo "window.location.href='".__ROOT__."/index.php/Home/Index/index';";
                 echo "</script>";
@@ -312,27 +323,7 @@ class IndexController extends CommonController {
         $this->display();
     }
 
-	//我的产品
-	public function financial(){
-		$orderlog =M('orderlog');
-		$result  = $orderlog->join('p_product ON p_orderlog.productid=p_product.id')->where(array('userid'=>session('uid')))->select();
-		foreach($result as $k=>$v){
-			if($v['states']==0){
-				$v['total'] = $v['prices'] *$v['num'];
-				$data['wait'][] =$v;
-			}
-			if($v['states']==1){
-				$v['total'] = $v['prices'] *$v['num'];
-				$data['coming'][] =$v;
-			}
-			if($v['states']==2){
-				$v['total'] = $v['prices'] *$v['num'];
-				$data['comoever'][] =$v;
-			}
-		}
-		$this->assign('res',$data);
-		$this->display();
-	}
+
 
 	public function share(){
 	    $url = "http://402231.ouyouhui.com"."/index.php/Home/Login/reg/fid/".session('uid').".html";
@@ -362,40 +353,4 @@ class IndexController extends CommonController {
     }
 
 
-
-    /**
-	 * 获取当前页面完整URL地址
-	 */
-	private function get_url() {
-		$sys_protocal = isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == '443' ? 'https://' : 'http://';
-		$php_self = $_SERVER['PHP_SELF'] ? $_SERVER['PHP_SELF'] : $_SERVER['SCRIPT_NAME'];
-		$path_info = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : '';
-		$relate_url = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : $php_self.(isset($_SERVER['QUERY_STRING']) ? '?'.$_SERVER['QUERY_STRING'] : $path_info);
-		return $sys_protocal.(isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '').$relate_url;
-	}
-
-
-	private function getlists($url)
-	{
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_POST, 1);
-		curl_setopt($ch, CURLOPT_HEADER, 0);
-		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		$result = curl_exec($ch);
-		curl_close($ch);
-		return json_decode($result, true);
-	}
-
-	private function curlget($url){
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL,$url);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($ch, CURLOPT_HEADER, 0);
-//		执行并获取HTML文档内容
-		$output = curl_exec($ch);
-		//释放curl句柄
-		curl_close($ch);
-		return json_decode($output, true);
-	}
 }
