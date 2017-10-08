@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50540
 File Encoding         : 65001
 
-Date: 2017-10-08 17:28:09
+Date: 2017-10-08 23:48:36
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -152,7 +152,7 @@ INSERT INTO `p_land` VALUES ('7', '7', '1', '1', null, '2017-10-07 15:10:41');
 INSERT INTO `p_land` VALUES ('8', '8', '1', '1', null, '2017-10-07 15:10:43');
 INSERT INTO `p_land` VALUES ('9', '9', '1', '0', null, null);
 INSERT INTO `p_land` VALUES ('10', '10', '1', '0', null, null);
-INSERT INTO `p_land` VALUES ('11', '11', '1', '0', null, null);
+INSERT INTO `p_land` VALUES ('11', '11', '1', '1', null, '2017-10-08 23:46:29');
 INSERT INTO `p_land` VALUES ('12', '12', '1', '0', null, null);
 INSERT INTO `p_land` VALUES ('13', '13', '1', '0', null, null);
 INSERT INTO `p_land` VALUES ('14', '14', '1', '0', null, null);
@@ -366,7 +366,7 @@ CREATE TABLE `p_orderlog` (
 -- ----------------------------
 INSERT INTO `p_orderlog` VALUES ('1084', '1', '9', '土豆', '土豆', null, '2', '201710071552496455', '1507362769', '1', null, '2017-10-07', '1', null, '0');
 INSERT INTO `p_orderlog` VALUES ('1085', '1', '9', '土豆', '土豆', '/devjiu/Public/Uploads/2017-09-27/59cbb13a446cc.png', '2', '201710071555145962', '1507362914', '1', null, '2017-10-07', '1', null, '0');
-INSERT INTO `p_orderlog` VALUES ('1086', '1', '9', '土豆', '土豆', '/devjiu/Public/Uploads/2017-09-27/59cbb13a446cc.png', '1', '201710071558088195', '1507363088', '1', null, '2017-10-07', '1', null, '0');
+INSERT INTO `p_orderlog` VALUES ('1086', '1', '9', '土豆', '土豆', '/devjiu/Public/Uploads/2017-09-27/59cbb13a446cc.png', '2', '201710071558088195', '1507363088', '1', null, '2017-10-07', '1', null, '0');
 INSERT INTO `p_orderlog` VALUES ('1087', '1', '9', '土豆', '土豆', '/devjiu/Public/Uploads/2017-09-27/59cbb13a446cc.png', '1', '201710071558135699', '1507363093', '1', null, '2017-10-07', '1', null, '0');
 INSERT INTO `p_orderlog` VALUES ('1088', '1', '9', '土豆', '土豆', '/devjiu/Public/Uploads/2017-09-27/59cbb13a446cc.png', '1', '201710071559211998', '1507363161', '1', null, '2017-10-07', '1', null, '0');
 INSERT INTO `p_orderlog` VALUES ('1089', '1', '9', '土豆', '土豆', '/devjiu/Public/Uploads/2017-09-27/59cbb13a446cc.png', '1', '201710071559262032', '1507363166', '1', null, '2017-10-07', '1', null, '0');

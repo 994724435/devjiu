@@ -8,9 +8,10 @@ $(function(){
     var money=$(this).attr('data-money');
     var id=$(this).attr('data-id');
     var kucun=$(this).attr('data-kucun');
+    $("#kuncun").val(kucun);
    $("#goodsMoney").val(money);
+  
    $("#goodsId").val(id);
-   $("#kucun").val(kucun);
    $("#shopMask").addClass('hidden');
    $("#shopMask1").removeClass('hidden');
   });
@@ -27,7 +28,10 @@ $(function(){
 // 商城开关
 
    $(".shippAddress").click(function() {
-
+       $("#kucun1").val($("#kuncun").val());
+       $("#buy_num1").val($("#buy_num").val());
+       $("#goodsMoney1").val($("#goodsMoney").val());
+       $("#goodsId1").val($("#goodsId").val());
        $("#adressMask").show();
    });
     $("#adressMask .returnImg").click(function() {
@@ -45,12 +49,27 @@ $(function(){
 
 // 仓库开关
 
-   
+$(".land .jiuTong").click(function(event) {
+    event.stopPropagation();
+    var that=$(this).parents(".land");
+    $(that).find(".application").animate({
+        "opacity":1
+    },2000,function(){
+       $(that).find(".application").animate({
+        "opacity":0
+      },2000);
+    });
+});
+
 
 // 酒桶点击
-  $(".jiuTong").click(function() {
-      var landId=$(this).parents("li").attr('data-land');
+  $(".land").click(function() {
+      var landId=$(this).attr('data-land');
+      // alert(landId);
       $("#landId").val(landId);
+      if($(this).find("img").hasClass('jiuTong')){
+        return;
+      }
       $("#houseShow1").show();
   });
   $("#houseShow1 .closeImg").click(function() {
@@ -65,16 +84,16 @@ $(function(){
 
       $.ajax({
          type: "POST",
-         url: "http://localhost/dev/devjiu/index.php/Home/Index/dealland",
+         url: "http://122.114.76.216/index.php/Home/Index/dealland",
          data: {
             landId:landId,
             toolId:toolId
          },
          success: function(msg){
-           if(msg==1){
-               alert( "使用成功");
-               window.location.reload();
-           }
+             if(msg==1){
+                 alert( "使用成功");
+                 window.location.reload();
+             }
              if(msg==2){
                  alert( "酒桶不足");
                  window.location.reload();

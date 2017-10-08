@@ -5,9 +5,9 @@
 	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 	<script type="text/javascript" src="__ROOT__/Public/Home/js/fontSize.js"></script>
 	<script type="text/javascript" src="__ROOT__/Public/Home/js/jquery-3.1.1.min.js"></script>
-	<script type="text/javascript" src="__ROOT__/Public/Home/js/index.js?v=2"></script>
+	<script type="text/javascript" src="__ROOT__/Public/Home/js/index.js?v=11"></script>
 	<link rel="stylesheet" type="text/css" href="__ROOT__/Public/Home/css/aui.min.css">
-	<link rel="stylesheet" type="text/css" href="__ROOT__/Public/Home/css/style.css?v=1">
+	<link rel="stylesheet" type="text/css" href="__ROOT__/Public/Home/css/style.css?v=2">
 	<title>酒模式</title>
 </head>
 <body class="indexBg">
@@ -16,6 +16,7 @@
 	<li class="land land{$v.num}" style="background: url(__ROOT__/Public/Home/img/p_2.png) no-repeat;" data-land="{$v.num}">
 		<if condition="$v.state eq 1">
 			<img src="__ROOT__/Public/Home/img/p_3.png" alt="" class="jiuTong">
+			<span class="application">300</span>
 		</if>
 	</li>
 	</foreach>
@@ -88,7 +89,7 @@
 				</li>
 				<li class="main_com_li">
 					<span class="main_com_li_left">购买数量:</span>
-					<input type="number" name="num" value="1">
+					<input type="number" name="num" value="1" id="buy_num">
 				</li>
 			</ul>
 			<button type="button" class="shippAddress">填写收货地址</button>
@@ -105,7 +106,10 @@
 			<img src="__ROOT__/Public/Home/img/x.png" alt="" class="closeImg">
 		</div>
 		<form action="__ROOT__/index.php/Home/Index/buyProduct"  method="post"  enctype="multipart/form-data">
-
+			<input type="hidden" id="goodsMoney1">
+			<input type="hidden" id="goodsId1">
+			<input type="hidden" id="kucun1">
+            <input type="hidden" id="buy_num1">
 			<ul>
 				<li class="main_com_li">
 					<span class="main_com_li_left">收货人地址:</span>

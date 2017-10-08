@@ -5,6 +5,8 @@ li{list-style: none;}
 .mui-icon-arrowleft,.mui-title,.mui-bar .mui-btn-nav.mui-pull-left{color:#fff;}
 /*html{max-width: 640px;margin:0 auto;}*/
 .indexBg{background: url(../img/bg.png) no-repeat;background-size: 100% auto;overflow: hidden;position: relative;}
+
+
 .lands{width: 100%;max-width: 640px;position: absolute;left: 0;top: 5rem;height: 4rem;}
 .land{ width: 1.2rem;height: .8rem;background-size: 100% auto !important;position: absolute;}
 .land1{left: .5rem;top: .97rem;z-index:3;}
@@ -113,7 +115,13 @@ i{font-style: normal;font-size: .2rem;}
     top: -0.4rem;
     right: .5rem;
     z-index: 33;}
-.application{display: inline-block;padding: 0 .2rem;background: #fff;color: #333;position: absolute;left: 0rem;top: .5rem;font-size: 12px;border-radius: .7rem;opacity: 0;}
+.application{display: inline-block;padding: 0 .2rem;background: #fff;color: #333;
+    position: absolute;left: -0.2rem;top: -0.5rem;font-size: 11px;
+    border-radius: .7rem;
+    height: 14px;
+    line-height: 14px;
+    opacity: 0;
+}
 #singleMoney{outline: none;background: transparent;border:none;width: 1rem;    font-size: .27rem;color: #9a5d27;}
 #singleMoney1{outline: none;background: transparent;border:none;width: 1rem;    font-size: .27rem;color: #9a5d27;}
 
