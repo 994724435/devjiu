@@ -4,12 +4,20 @@ use Think\Controller;
 class MessageController extends CommonController {
 	public function selectmsg(){
         $menber = M('message');
-        if($_GET['name']){
-            $map['f_user_phone']=array('like','%'.$_GET['name'].'%');
-            $users= $menber->where($map)->order('id DESC')->select();
-        }else{
-            $users= $menber->order('id DESC')->select();
+        $map=array();
+        if($_GET['uid']){
+            $map['f_user_phone']=$_GET['uid'];
         }
+
+        if($_GET['mindate']&&$_GET['maxdate']){
+            $map['addtime'] =array(array('elt',$_GET['maxdate']." 23:59:59"),array('egt',$_GET['mindate']." 00:00:00"),'and');;
+        }
+
+        if($_GET['type']){
+            $map['state']=$_GET['type'];
+        }
+
+        $users= $menber->where($map)->order('id DESC')->select();
         $this->assign('users',$users);
         $this->display();
     }
@@ -31,6 +39,7 @@ class MessageController extends CommonController {
         if($_POST['phone'] && $_POST['message']){
             if($_POST['phone'] == 1){
                 $data['f_user_name'] = $_SESSION['uname'];
+                $data['title'] = $_POST['title'];
                 $data['f_user_phone'] ="admin";
                 $data['f_user_id'] = 1;
                 $data['to_user_name'] = "全员";
@@ -56,6 +65,7 @@ class MessageController extends CommonController {
             $data['f_user_name'] = $_SESSION['uname'];
             $data['f_user_phone'] ="admin";
             $data['f_user_id'] = 1;
+            $data['title'] = $_POST['title'];
             $data['to_user_name'] = $userinfo[0]['name'];
             $data['to_user_phone'] =$userinfo[0]['tel'];
             $data['to_user_id'] = $userinfo[0]['uid'];

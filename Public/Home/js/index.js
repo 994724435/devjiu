@@ -58,18 +58,21 @@ $(function(){
   $(".useSpan").click(function() {
       var landId=$("#landId").val();
       var toolId=$(this).attr('data-id');
-      alert("使用成功");
       $("#houseShow1").hide();
 
       $.ajax({
          type: "POST",
-         url: "",
+         url: "http://localhost/dev/devjiu/index.php/Home/Index/dealland",
          data: {
             landId:landId,
             toolId:toolId
          },
          success: function(msg){
-           alert( "Data Saved: " + msg );
+           if(msg==1){
+               alert( "使用成功");
+               window.location.reload();
+           }
+
          }
       });
   });

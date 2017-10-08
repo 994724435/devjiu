@@ -13,7 +13,7 @@
 									<label for="focusedinput" class="col-sm-2 control-label">选择用户</label>
 									<div class="col-sm-8">
 										<select class="form-control1" name="phone">
-											<!--<option value="1">全员</option>-->
+											<option value="1">全员--公告</option>
 											<foreach name="users" item='v'>
 											<option value="{$v.tel}">{$v.tel}---{$v.name}</option>
 											</foreach>
@@ -21,6 +21,16 @@
 									</div>
 								</div>
 
+
+								<div class="form-group">
+									<label for="focusedinput" class="col-sm-2 control-label">标题</label>
+									<div class="col-sm-8">
+										<input type="text" name="title"  value="" class="form-control1" id="focusedinput" placeholder="">
+									</div>
+									<div class="col-sm-2">
+										<p class="help-block"></p>
+									</div>
+								</div>
 
 								<div class="form-group">
 									<label for="focusedinput" class="col-sm-2 control-label">信息内容</label>

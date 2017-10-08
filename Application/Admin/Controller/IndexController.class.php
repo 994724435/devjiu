@@ -49,6 +49,7 @@ class IndexController extends CommonController {
             $data['cont'] =$_POST['cont'];
             $data['pic'] =__ROOT__.$pic;
             $data['price'] =$_POST['price'];
+            $data['left'] =$_POST['left'];
             $data['effectdays'] =$_POST['effectdays'];
             $data['daycome'] =$_POST['daycome'];
             $data['daynum'] =$_POST['daynum'];
@@ -97,6 +98,7 @@ class IndexController extends CommonController {
                 $data['pic'] =$pic;
             }
             $data['price'] =$_POST['price'];
+            $data['left'] =$_POST['left'];
             $data['effectdays'] =$_POST['effectdays'];
             $data['daycome'] =$_POST['daycome'];
             $data['daynum'] =$_POST['daynum'];

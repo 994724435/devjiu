@@ -61,7 +61,7 @@
 		<foreach name="productlist" item='v'>
 		<ul class="maskList">
 			<li>
-				<img src="__ROOT__/Public/Home/img/p_3.png" alt="">
+				<img src="{$v.pic}" alt="">
 				<ul>
 					<li>{$v.name}：{$v.cont}</li>
 					<li>￥{$v.price}</li>
@@ -159,18 +159,18 @@
 			<li>
 				<img src="__ROOT__/Public/Home/img/p_3.png" alt="">
 				<ul>
-					<li>土豆：大米大米</li>
-					<li>数量：1</li>
+					<li>酒桶：大米大米</li>
+					<li>数量：{$diproduct}</li>
 				</ul>
-				<span class="useSpan" data-id="0">使用</span>
+				<span class="useSpan" data-id="1">使用</span>
 			</li>
 			<li>
 				<img src="__ROOT__/Public/Home/img/p_4.png" alt="">
 				<ul>
-					<li>小麦：对对对</li>
-					<li>数量：1</li>
+					<li>小麦：酿酒</li>
+					<li>数量：{$username.jingbag}</li>
 				</ul>
-				<span class="useSpan" data-id="0">使用</span>
+				<span class="useSpan" data-id="2">使用</span>
 			</li>
 
 		</ul>
@@ -190,18 +190,18 @@
 			<li>
 				<img src="__ROOT__/Public/Home/img/p_3.png" alt="">
 				<ul>
-					<li>土豆：大米大米</li>
-					<li>数量：1</li>
+					<li>酒桶：酿酒</li>
+					<li>数量：{$diproduct}</li>
 				</ul>
-				<span class="useSpan" data-id="0">使用</span>
+				<span class="useSpan" data-id="1">使用</span>
 			</li>
 			<li>
 				<img src="__ROOT__/Public/Home/img/p_4.png" alt="">
 				<ul>
 					<li>小麦：对对对</li>
-					<li>数量：1</li>
+					<li>数量：{$username.jingbag}</li>
 				</ul>
-				<span class="useSpan" data-id="0">使用</span>
+				<span class="useSpan" data-id="2">使用</span>
 			</li>
 		</ul>
 	</div>

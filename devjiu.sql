@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50540
 File Encoding         : 65001
 
-Date: 2017-10-07 22:42:04
+Date: 2017-10-08 11:47:09
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -140,7 +140,7 @@ CREATE TABLE `p_land` (
 -- ----------------------------
 -- Records of p_land
 -- ----------------------------
-INSERT INTO `p_land` VALUES ('1', '1', '1', '1', null, '2017-10-07 15:10:33');
+INSERT INTO `p_land` VALUES ('1', '1', '1', '1', null, '2017-10-08 11:36:11');
 INSERT INTO `p_land` VALUES ('2', '2', '1', '1', null, '2017-10-07 15:10:39');
 INSERT INTO `p_land` VALUES ('3', '3', '1', '1', null, '2017-10-07 15:10:39');
 INSERT INTO `p_land` VALUES ('4', '4', '1', '1', null, '2017-10-07 15:10:40');
@@ -352,21 +352,23 @@ CREATE TABLE `p_orderlog` (
   `out` varchar(40) DEFAULT NULL COMMENT '产生结果',
   `addymd` date DEFAULT NULL,
   `type` int(2) DEFAULT '1' COMMENT '1下单购 2公排',
+  `option` varchar(255) DEFAULT NULL,
+  `pay` int(11) DEFAULT '0' COMMENT '0待支付 1支付成功 2支付失败',
   PRIMARY KEY (`logid`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1093 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of p_orderlog
 -- ----------------------------
-INSERT INTO `p_orderlog` VALUES ('1084', '1', '9', '土豆', '土豆', null, '1', '201710071552496455', '1507362769', '1', null, '2017-10-07', '1');
-INSERT INTO `p_orderlog` VALUES ('1085', '1', '9', '土豆', '土豆', '/devjiu/Public/Uploads/2017-09-27/59cbb13a446cc.png', '1', '201710071555145962', '1507362914', '1', null, '2017-10-07', '1');
-INSERT INTO `p_orderlog` VALUES ('1086', '1', '9', '土豆', '土豆', '/devjiu/Public/Uploads/2017-09-27/59cbb13a446cc.png', '1', '201710071558088195', '1507363088', '1', null, '2017-10-07', '1');
-INSERT INTO `p_orderlog` VALUES ('1087', '1', '9', '土豆', '土豆', '/devjiu/Public/Uploads/2017-09-27/59cbb13a446cc.png', '1', '201710071558135699', '1507363093', '1', null, '2017-10-07', '1');
-INSERT INTO `p_orderlog` VALUES ('1088', '1', '9', '土豆', '土豆', '/devjiu/Public/Uploads/2017-09-27/59cbb13a446cc.png', '1', '201710071559211998', '1507363161', '1', null, '2017-10-07', '1');
-INSERT INTO `p_orderlog` VALUES ('1089', '1', '9', '土豆', '土豆', '/devjiu/Public/Uploads/2017-09-27/59cbb13a446cc.png', '1', '201710071559262032', '1507363166', '1', null, '2017-10-07', '1');
-INSERT INTO `p_orderlog` VALUES ('1090', '1', '9', '土豆', '土豆', '/devjiu/Public/Uploads/2017-09-27/59cbb13a446cc.png', '1', '201710071600222546', '1507363222', '1', null, '2017-10-07', '1');
-INSERT INTO `p_orderlog` VALUES ('1091', '1', '9', '土豆', '土豆', '/devjiu/Public/Uploads/2017-09-27/59cbb13a446cc.png', '1', '201710071600222546', '1507363222', '1', null, '2017-10-07', '1');
-INSERT INTO `p_orderlog` VALUES ('1092', '1', '9', '土豆', '土豆', '/devjiu/Public/Uploads/2017-09-27/59cbb13a446cc.png', '1', '201710071602572444', '1507363377', '1', '14544', '2017-10-07', '1');
+INSERT INTO `p_orderlog` VALUES ('1084', '1', '9', '土豆', '土豆', null, '2', '201710071552496455', '1507362769', '1', null, '2017-10-07', '1', null, '0');
+INSERT INTO `p_orderlog` VALUES ('1085', '1', '9', '土豆', '土豆', '/devjiu/Public/Uploads/2017-09-27/59cbb13a446cc.png', '2', '201710071555145962', '1507362914', '1', null, '2017-10-07', '1', null, '0');
+INSERT INTO `p_orderlog` VALUES ('1086', '1', '9', '土豆', '土豆', '/devjiu/Public/Uploads/2017-09-27/59cbb13a446cc.png', '1', '201710071558088195', '1507363088', '1', null, '2017-10-07', '1', null, '0');
+INSERT INTO `p_orderlog` VALUES ('1087', '1', '9', '土豆', '土豆', '/devjiu/Public/Uploads/2017-09-27/59cbb13a446cc.png', '1', '201710071558135699', '1507363093', '1', null, '2017-10-07', '1', null, '0');
+INSERT INTO `p_orderlog` VALUES ('1088', '1', '9', '土豆', '土豆', '/devjiu/Public/Uploads/2017-09-27/59cbb13a446cc.png', '1', '201710071559211998', '1507363161', '1', null, '2017-10-07', '1', null, '0');
+INSERT INTO `p_orderlog` VALUES ('1089', '1', '9', '土豆', '土豆', '/devjiu/Public/Uploads/2017-09-27/59cbb13a446cc.png', '1', '201710071559262032', '1507363166', '1', null, '2017-10-07', '1', null, '0');
+INSERT INTO `p_orderlog` VALUES ('1090', '1', '9', '土豆', '土豆', '/devjiu/Public/Uploads/2017-09-27/59cbb13a446cc.png', '1', '201710071600222546', '1507363222', '1', null, '2017-10-07', '1', null, '0');
+INSERT INTO `p_orderlog` VALUES ('1091', '1', '9', '土豆', '土豆', '/devjiu/Public/Uploads/2017-09-27/59cbb13a446cc.png', '1', '201710071600222546', '1507363222', '1', null, '2017-10-07', '1', null, '0');
+INSERT INTO `p_orderlog` VALUES ('1092', '1', '9', '土豆', '土豆', '/devjiu/Public/Uploads/2017-09-27/59cbb13a446cc.png', '1', '201710071602572444', '1507363377', '1', '14544', '2017-10-07', '1', null, '0');
 
 -- ----------------------------
 -- Table structure for p_product

@@ -12,16 +12,22 @@
 			  <h3>信息列表  <a href="__ROOT__/index.php/Admin/Message/addmsg">发送信息</a> </h3>
 			  <form class="form-horizontal" action="" method="get" enctype="multipart/form-data">
 				  <div class="form-group">
-					  <label for="focusedinput" class="col-sm-2 control-label">用户电话</label>
-					  <div class="col-sm-8">
-						  <input type="text" name="name" value="" class="form-control1" id="focusedinput" placeholder="">
-						  <p style="margin-left: 200px;margin-top: 20px;"></p><button class="btn-success btn">Submit</button>
-					   </div>
-					  <div class="col-sm-2">
-						  <p class="help-block"></p>
-					  </div>
+					  用户电话 <input type="text" name="uid" style="width: 150px" value="" id="focusedinput" placeholder="">
+					  日期 <input type="date" name="mindate" style="width: 150px" value="" id="focusedinput" placeholder="">
+					  <input type="date" name="maxdate" style="width: 150px" value="" id="focusedinput" placeholder="">
+					  类型<select style="width: 150px" name="type">
+					  <option value="0">全部</option>
+					  <option value="1">未读</option>
+					  <option value="2">已读</option>
+				  </select>
+
 				  </div>
 
+				  <div class="col-sm-2">
+					  <p class="help-block"></p>
+				  </div>
+
+				  <p style="margin-left: 200px;margin-top: 20px;"></p><button class="btn-success btn">Submit</button>
 			  </form>
 		    <table class="table">
 		      <thead>
@@ -59,7 +65,7 @@
 		           <th>{$v.to_user_phone}</th>
 				  <th>{$v.message}</th>
 				  <th>{$v.addtime}</th>
-				  <td><if condition="$v.state eq 1"> 未读<elseif condition="$v.manager eq 2"/>已读 </if></td>
+				  <td><if condition="$v.state eq 1"> 未读<elseif condition="$v.state eq 2"/>已读 </if></td>
 				  <th><a href="__ROOT__/index.php/Admin/Message/deletemsg/id/{$v.id}">删 除 </a></th>
 		        </tr>
 		      	<?php $i++ ;?>

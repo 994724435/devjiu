@@ -21,11 +21,13 @@ class MessageController extends CommonController {
 
     public function notice_detail(){
         $msg =M("message")->where(array('id'=>$_GET['id']))->select();
+        M("message")->where(array('id'=>$_GET['id']))->save(array('state'=>2));
         $this->assign('msg',$msg[0]);
         $this->display();
     }
 
     public function letter_detail(){
+        M("message")->where(array('id'=>$_GET['id']))->save(array('state'=>2));
         $msg =M("message")->where(array('id'=>$_GET['id']))->select();
         $this->assign('msg',$msg[0]);
         $this->display();

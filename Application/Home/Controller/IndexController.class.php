@@ -3,33 +3,29 @@ namespace Home\Controller;
 use Think\Controller;
 header('content-type:text/html;charset=utf-8');
 class IndexController extends CommonController {
-    public function dakuan(){
-        $commit = $_GET['id'];
-        $incomelog = M('incomelog');
-        $log = $incomelog->where(array('commitid'=>$commit))->select();
-        if($log[0]['state'] == 4){
-            $incomelog->where(array('commitid'=>$commit))->save(array('state'=>5));
-        }
-        if($log[0]['state'] == 5){
-            $menber = M('menber');
-            foreach ($log as $v){
-                if($v['orderid']==1){
-                    $incomelog->where(array('id'=>$v['id']))->save(array('state'=>2));
+    public function dealland(){
+        if($_POST['toolId']){
+            if($_POST['toolId']==1){    //酿酒  landId
+                $orderlog = M('orderlog');
+                $land    =M('land');
+                $order =$orderlog->where(array('userid'=>session('uid'),'states'=>1))->select();
+                if(!$order[0]){
+                    echo 2;exit();
                 }
-                if($v['orderid']==2){  // 收款方
-                    $incomelog->where(array('id'=>$v['id']))->save(array('state'=>1));
-                    // 处理收款
-                    $info = $menber->where(array('uid'=>$v['userid']))->select();
-                    $xiyue = bcadd($info[0]['chargebag'],$v['income'],2);
-                    $menber->where(array('uid'=>$v['userid']))->save(array('chargebag'=>$xiyue));
+                if($_POST['landId']){ //点击地使用
+                   $myland = $land->where(array('uid'=>session('uid'),'num'=>$_POST['landId']))->find();
+                   if($myland['state'] !=0){
+                       echo 3;exit();
+                   }
+                    $land->where(array('uid'=>session('uid'),'num'=>$_POST['landId']))->save(array('state'=>1));
+                    $orderlog->where(array('logid'=>$order[0]['logid']))->save(array('states'=>2));
                 }
             }
-        }
+            if($_POST['toolId']==2){    //使用小麦
 
-        echo "<script>alert('操作成功');";
-        echo "window.location.href='".__ROOT__."/index.php/Home/User/rechargeInfo';";
-        echo "</script>";
-        exit;
+            }
+            print_r(1);
+        }
     }
 
 
@@ -119,13 +115,14 @@ class IndexController extends CommonController {
         }
     }
 
+
+
    //主页
 	public function index(){
         // 1仓库中 2收益中
         $product = M("product");
         $productlog =M("orderlog");
-        $cangkuproducr =  $productlog->where(array('userid'=>session('uid'),'states'=>2))->select();
-        $diproduct =$productlog->where(array('userid'=>session('uid'),'states'=>1))->select();
+        $diproduct =$productlog->where(array('userid'=>session('uid'),'states'=>1))->count('num');
 
         $land = M("land")->where(array('uid'=>session('uid')))->select();
 
@@ -136,7 +133,6 @@ class IndexController extends CommonController {
         $cun  =M("config")->where(array('id'=>3))->find();
 
         $this->assign('land',$land);
-        $this->assign('cangkuproducr',$cangkuproducr);
         $this->assign('diproduct',$diproduct);
         $this->assign('productlist',$productlist);
         $this->assign('cun',$cun['value']);
