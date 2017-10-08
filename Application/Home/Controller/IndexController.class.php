@@ -22,6 +22,11 @@ class IndexController extends CommonController {
                 }
             }
             if($_POST['toolId']==2){    //使用小麦
+                $menber = M("menber");
+                $userinfo =$menber->where(array('uid'=>session('uid')))->find();
+                if($userinfo['jingbag']==0){
+                    echo 4;exit();
+                }
 
             }
             print_r(1);

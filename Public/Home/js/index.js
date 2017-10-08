@@ -72,7 +72,18 @@ $(function(){
                alert( "使用成功");
                window.location.reload();
            }
-
+             if(msg==2){
+                 alert( "酒桶不足");
+                 window.location.reload();
+             }
+             if(msg==3){
+                 alert( "该地已使用");
+                 window.location.reload();
+             }
+             if(msg==4){
+                 alert( "小麦不足");
+                 window.location.reload();
+             }
          }
       });
   });
