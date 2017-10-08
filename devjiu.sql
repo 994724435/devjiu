@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50540
 File Encoding         : 65001
 
-Date: 2017-10-08 11:47:09
+Date: 2017-10-08 17:28:09
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -61,9 +61,9 @@ CREATE TABLE `p_config` (
 -- ----------------------------
 -- Records of p_config
 -- ----------------------------
-INSERT INTO `p_config` VALUES ('1', 'MIF价格', '10', 'MIF价格');
+INSERT INTO `p_config` VALUES ('1', '运费配置', '10', '运费配置');
 INSERT INTO `p_config` VALUES ('2', 'MIF静态收益', '0.1', 'MIF静态收益');
-INSERT INTO `p_config` VALUES ('3', '酒库存', '500', '酒库存');
+INSERT INTO `p_config` VALUES ('3', '酒', '500', '酒');
 INSERT INTO `p_config` VALUES ('4', '推荐奖 2代', '0.04', null);
 INSERT INTO `p_config` VALUES ('5', '推荐奖 3代', '0.03', null);
 INSERT INTO `p_config` VALUES ('6', '推荐奖 4代', '0.02', null);
@@ -99,7 +99,7 @@ CREATE TABLE `p_incomelog` (
   `username` varchar(100) DEFAULT NULL,
   `commitid` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=14553 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=14555 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of p_incomelog
@@ -122,6 +122,8 @@ INSERT INTO `p_incomelog` VALUES ('14549', '8', '2', '酒票转账', '2017-10-07
 INSERT INTO `p_incomelog` VALUES ('14550', '2', '1', '酒票转账', '2017-10-07', '1507386159', '1', '2', '10', '', null, null);
 INSERT INTO `p_incomelog` VALUES ('14551', '8', '2', '酒票转账', '2017-10-07', '1507386182', '2', '1', '10', '', null, null);
 INSERT INTO `p_incomelog` VALUES ('14552', '2', '1', '酒票转账', '2017-10-07', '1507386182', '1', '2', '10', '', null, null);
+INSERT INTO `p_incomelog` VALUES ('14553', '6', '2', '下单购买', '2017-10-08', '1507440757', '1', '1', '1', '', null, null);
+INSERT INTO `p_incomelog` VALUES ('14554', '6', '2', '下单购买', '2017-10-08', '1507451972', '1', '1', '1', '', null, null);
 
 -- ----------------------------
 -- Table structure for p_land
@@ -207,7 +209,7 @@ CREATE TABLE `p_menber` (
 -- ----------------------------
 -- Records of p_menber
 -- ----------------------------
-INSERT INTO `p_menber` VALUES ('1', 'MIFl领队', 'a332211', '13649588123', null, '1', '1387.75', '84', '0', '1,', null, null, '1', '7560.00', null, null, null, null, null, null, null, '231', '0', '0', '2,');
+INSERT INTO `p_menber` VALUES ('1', 'MIFl领队', 'a332211', '13649588123', null, '1', '1387.75', '0', '0', '1,', null, null, '1', '7558.00', null, null, null, null, null, null, null, '233', '0', '0', '2,');
 INSERT INTO `p_menber` VALUES ('2', '明月秋风', '123456', '17899556112', null, '1', '20.00', '0.00', '1', '1,2,', null, '2017-09-03', '123456', '41.00', null, null, null, null, null, null, null, '1319', '0', '0', null);
 INSERT INTO `p_menber` VALUES ('3', '365财团', '135168', '13885805888', null, '1', '895.11', '3.00', '1', '1,3,', null, '2017-09-03', '135168', '1010.00', '', '', '', '', '', '', '', '19', '0', '0', null);
 INSERT INTO `p_menber` VALUES ('4', '野狼战队', '123456', '18889580666', null, '1', '1067.66', '47', '3', '1,3,4,', null, '2017-09-03', '123456', '0.01', null, null, null, null, null, null, null, '44', '0', '0', null);
@@ -324,15 +326,17 @@ CREATE TABLE `p_message` (
   `addtime` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `commitid` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of p_message
 -- ----------------------------
-INSERT INTO `p_message` VALUES ('2', 'admin', 'admin', '1', '明月秋风', '17899556112', '1', 'dasfasd', 'test1', '2', '1', '2017-10-07 16:21:40', null);
+INSERT INTO `p_message` VALUES ('2', 'admin', 'admin', '1', '明月秋风', '17899556112', '1', 'dasfasd', 'test1', '2', '2', '2017-10-08 12:03:45', null);
 INSERT INTO `p_message` VALUES ('3', 'admin', 'admin', '1', '365财团', '13885805888', '3', 'sdafsdfaasdfa', null, '2', '1', '2017-09-29 10:36:21', null);
 INSERT INTO `p_message` VALUES ('5', 'admin', 'admin', '1', '全员', '全员', '0', '大沙发上的方式的方式阿三大幅啊沙发上的', '全员信息', '3', '1', '2017-10-07 16:29:42', null);
 INSERT INTO `p_message` VALUES ('6', 'MIFl领队', '13649588123', '1', 'admin', null, null, 'test', null, '1', '1', null, null);
+INSERT INTO `p_message` VALUES ('7', 'admin', 'admin', '1', '全员', '全员', '0', 'dsfasdfasdfasdf', '444', '3', '2', '2017-10-08 12:03:33', null);
+INSERT INTO `p_message` VALUES ('8', 'admin', 'admin', '1', '全员', '全员', '0', 'asdfasfda', 'sadfasdf', '3', '2', '2017-10-08 12:03:01', null);
 
 -- ----------------------------
 -- Table structure for p_orderlog
@@ -355,7 +359,7 @@ CREATE TABLE `p_orderlog` (
   `option` varchar(255) DEFAULT NULL,
   `pay` int(11) DEFAULT '0' COMMENT '0待支付 1支付成功 2支付失败',
   PRIMARY KEY (`logid`)
-) ENGINE=MyISAM AUTO_INCREMENT=1093 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=1095 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of p_orderlog
@@ -369,6 +373,8 @@ INSERT INTO `p_orderlog` VALUES ('1089', '1', '9', '土豆', '土豆', '/devjiu/
 INSERT INTO `p_orderlog` VALUES ('1090', '1', '9', '土豆', '土豆', '/devjiu/Public/Uploads/2017-09-27/59cbb13a446cc.png', '1', '201710071600222546', '1507363222', '1', null, '2017-10-07', '1', null, '0');
 INSERT INTO `p_orderlog` VALUES ('1091', '1', '9', '土豆', '土豆', '/devjiu/Public/Uploads/2017-09-27/59cbb13a446cc.png', '1', '201710071600222546', '1507363222', '1', null, '2017-10-07', '1', null, '0');
 INSERT INTO `p_orderlog` VALUES ('1092', '1', '9', '土豆', '土豆', '/devjiu/Public/Uploads/2017-09-27/59cbb13a446cc.png', '1', '201710071602572444', '1507363377', '1', '14544', '2017-10-07', '1', null, '0');
+INSERT INTO `p_orderlog` VALUES ('1093', '1', '10', '2', '2', '/dev/devjiu/Public/Uploads/2017-10-08/59d9a17d4c22e.png', '1', '201710081332374278', '1507440757', '1', '14553', '2017-10-08', '1', null, '0');
+INSERT INTO `p_orderlog` VALUES ('1094', '1', '10', '2', '2', '/dev/devjiu/Public/Uploads/2017-10-08/59d9a17d4c22e.png', '1', '201710081639322786', '1507451972', '1', '14554', '2017-10-08', '1', null, '0');
 
 -- ----------------------------
 -- Table structure for p_product
@@ -387,12 +393,13 @@ CREATE TABLE `p_product` (
   `salenum` int(11) DEFAULT '0',
   `left` int(11) DEFAULT '0' COMMENT '库存',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of p_product
 -- ----------------------------
-INSERT INTO `p_product` VALUES ('9', '土豆', '大师傅', '/devjiu/Public/Uploads/2017-09-27/59cbb13a446cc.png', '12', null, null, '1', '2017', '0', '1');
+INSERT INTO `p_product` VALUES ('9', '土豆', '大师傅', '/dev/devjiu/Public/Uploads/2017-10-08/59d9a084096c5.png', '12', null, null, '1', '2017-10-08 11:53:27', '0', '30');
+INSERT INTO `p_product` VALUES ('10', '2', 'asd', '/dev/devjiu/Public/Uploads/2017-10-08/59d9a17d4c22e.png', '1', null, null, '1', '2017-10-08 11:54:37', '0', '498');
 
 -- ----------------------------
 -- Table structure for p_rite

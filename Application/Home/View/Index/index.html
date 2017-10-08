@@ -66,7 +66,7 @@
 					<li>{$v.name}：{$v.cont}</li>
 					<li>￥{$v.price}</li>
 				</ul>
-				<span class="buySpan" data-money="{$v.price}" data-id="{$v.id}">购买</span>
+				<span class="buySpan" data-money="{$v.price}" data-id="{$v.id}" data-kucun="{$v.left}">购买</span>
 			</li>
 		</ul>
 		</foreach>
@@ -84,7 +84,7 @@
 			<ul>
 				<li class="main_com_li">
 					<span class="main_com_li_left">库存:</span>
-					<input type="text" name="kucun" disabled="disabled" value="500">
+					<input type="text" id="kuncun" name="kucun" disabled="disabled" value="500">
 				</li>
 				<li class="main_com_li">
 					<span class="main_com_li_left">购买数量:</span>
@@ -121,7 +121,7 @@
 				</li>
 				<li class="main_com_li">
 					<span class="main_com_li_left">当前运费:</span>
-					<input type="text" name="yunfei" value="5" disabled="disabled">
+					<input type="text" name="yunfei" value="{$yunfei}" disabled="disabled">
 				</li>
 				<li class="main_com_li">
 					<span class="main_com_li_left">邮编:</span>

@@ -7,8 +7,10 @@ $(function(){
   $("#shopMask .buySpan").click(function() {
     var money=$(this).attr('data-money');
     var id=$(this).attr('data-id');
+    var kucun=$(this).attr('data-kucun');
    $("#goodsMoney").val(money);
    $("#goodsId").val(id);
+   $("#kucun").val(kucun);
    $("#shopMask").addClass('hidden');
    $("#shopMask1").removeClass('hidden');
   });
@@ -25,6 +27,7 @@ $(function(){
 // 商城开关
 
    $(".shippAddress").click(function() {
+
        $("#adressMask").show();
    });
     $("#adressMask .returnImg").click(function() {

@@ -130,6 +130,7 @@ class IndexController extends CommonController {
         $diproduct =$productlog->where(array('userid'=>session('uid'),'states'=>1))->count('num');
 
         $land = M("land")->where(array('uid'=>session('uid')))->select();
+        $yunfei =M("config")->where(array('id'=>1))->find();
 
         //商店
         $productlist = $product->where(array('state'=>1))->order('id asc')->select();
@@ -138,6 +139,7 @@ class IndexController extends CommonController {
         $cun  =M("config")->where(array('id'=>3))->find();
 
         $this->assign('land',$land);
+        $this->assign('yunfei',$yunfei['value']);
         $this->assign('diproduct',$diproduct);
         $this->assign('productlist',$productlist);
         $this->assign('cun',$cun['value']);
@@ -220,8 +222,6 @@ class IndexController extends CommonController {
                 if($left >= 0 ){
                     $menber->where(array('uid'=>session('uid')))->save(array('chargebag'=>$left));
                 }else{
-//                   $lef = bcsub($userallmoney ,$needmoney,2);
-//                   $menber->where(array('uid'=>session('uid')))->save(array('chargebag'=>$lef));
                     echo "<script>alert('酒票不足');";
                     echo "window.location.href='".__ROOT__."/index.php/Home/Index/index';";
                     echo "</script>";
@@ -243,22 +243,29 @@ class IndexController extends CommonController {
                 $out = $income->add($data);
                 $resreson ="购买成功";
                 $orderid =  date("YmdHis").rand(1000,9999);
-                for($i=0;$i<$_POST['num'];$i++){
-                    $order['userid'] =session('uid');
-                    $order['productid'] =$id ;
-                    $order['productname'] =$product['name'];
-                    $order['productmoney'] = $product['name'];
-                    $order['pic'] = $product['pic'];
-                    $order['states'] = 1;
-                    $order['out'] = $out;
-                    $order['orderid'] =$orderid;
-                    $order['addtime'] = time();
-                    $order['addymd'] = date("Y-m-d",time());
-                    $order['num'] = 1;
-                    $order['prices'] =$needmoney;
-                    $order['totals'] =$needmoney;
+
+                $order['userid'] =session('uid');
+                $order['productid'] =$id ;
+                $order['productname'] =$product['name'];
+                $order['productmoney'] = $product['name'];
+                $order['pic'] = $product['pic'];
+                $order['states'] = 1;
+                $order['out'] = $out;
+                $order['orderid'] =$orderid;
+                $order['addtime'] = time();
+                $order['addymd'] = date("Y-m-d",time());
+                $order['prices'] =$needmoney;
+                $order['totals'] =$needmoney;
+                if($id==9){
+                    for($i=0;$i<$_POST['num'];$i++){
+                        $order['num'] = 1;
+                        M("orderlog")->add($order);
+                    }
+                }else{
+                    $order['num'] = $_POST['num'];
                     M("orderlog")->add($order);
                 }
+
 
 
                 // 上家收益  tu do
