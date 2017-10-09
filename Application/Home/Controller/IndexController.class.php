@@ -27,7 +27,19 @@ class IndexController extends CommonController {
                 if($userinfo['jingbag']==0){
                     echo 4;exit();
                 }
-
+               $chargebag =bcadd($userinfo['chargebag'] , $userinfo['jingbag'],2);
+                $menber->where(array('uid'=>session('uid')))->save(array('chargebag'=>$chargebag,'jingbag'=>0));
+                //1收益 2充值 3静态提现  4动态体现  5 注册下级 6下单购买 7退本 8激活票转账 9酒票转账 10静态收益 11 动态收益 12小麦收益
+                $income =M('incomelog');
+                $data['type'] =12;
+                $data['state'] =1;
+                $data['reson'] ='小麦收益';
+                $data['addymd'] =date('Y-m-d',time());
+                $data['addtime'] =time();
+                $data['orderid'] =session('uid');
+                $data['userid'] =session('uid');
+                $data['income'] =$userinfo['jingbag'];
+                $out = $income->add($data);
             }
             print_r(1);
         }
@@ -158,6 +170,7 @@ class IndexController extends CommonController {
 
     public function buyProduct(){
         if($_POST['num'] > 0){
+
             if(!is_numeric($_POST['num'])){
                 echo "<script>alert('请不要输入非法字符');";
                 echo "window.location.href='".__ROOT__."/index.php/Home/Index/index';";
@@ -247,7 +260,7 @@ class IndexController extends CommonController {
                 $order['userid'] =session('uid');
                 $order['productid'] =$id ;
                 $order['productname'] =$product['name'];
-                $order['productmoney'] = $product['name'];
+                $order['productmoney'] = $product['price'];
                 $order['pic'] = $product['pic'];
                 $order['states'] = 1;
                 $order['out'] = $out;
@@ -262,6 +275,7 @@ class IndexController extends CommonController {
                         M("orderlog")->add($order);
                     }
                 }else{
+                    $order['option'] =$_POST['addr'].','.$_POST['username'].','.$_POST['tel'].','.$_POST['youbian'];
                     $order['num'] = $_POST['num'];
                     M("orderlog")->add($order);
                 }

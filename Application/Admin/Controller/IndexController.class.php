@@ -151,6 +151,9 @@ class IndexController extends CommonController {
         if($_GET['orderid']){
             $map['orderid'] =$_GET['orderid'];
         }
+        if($_GET['proid']){
+            $map['productid'] =$_GET['proid'];
+        }
         $users= $orderlog->where($map)->select();
 
         $this->assign('users',$users);

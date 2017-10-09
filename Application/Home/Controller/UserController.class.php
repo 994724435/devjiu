@@ -185,10 +185,11 @@ class UserController extends CommonController{
             $data['pwd'] =$_POST['pwd'];
             $data['pwd2'] =$_POST['pwd2'];
             $data['type'] =0;
+            $data['tel'] =$_POST['tel'];
             $data['fuid'] =session('uid');
             $data['addtime'] =date('Y-m-d H:i:s',time());
             $data['addymd'] = date('Y-m-d',time());
-            $data['chargebag'] =$_POST['radio1'];
+            $data['chargebag'] ='200';
             $data['incomebag'] =0;
             $res =$menber->add($data);
             if($res){
@@ -196,15 +197,18 @@ class UserController extends CommonController{
                 $jihuo =bcsub($res_menber[0]['dongbag'],$_POST['jihuo'],2);
                 $menber->where(array('uid'=>session('uid')))->save(array('chargebag'=>$chargebag,'dongbag'=>$jihuo));
                 // 上家金额记录
-//                $datas['state'] = 2;
-//                $datas['reson'] = "注册下级";
-//                $datas['type'] = 5;
-//                $datas['addymd'] = date('Y-m-d',time());
-//                $datas['addtime'] = date('Y-m-d H:i:s',time());
-//                $datas['orderid'] = $res;
-//                $datas['userid'] = session('uid');
-//                $datas['income'] = $_POST['radio1'];
-//                $this->savelog($datas);
+                $datas['state'] = 2;
+                $datas['reson'] = "注册下级酒票";
+                $datas['type'] = 5;
+                $datas['addymd'] = date('Y-m-d',time());
+                $datas['addtime'] = time();
+                $datas['orderid'] = $res;
+                $datas['userid'] = session('uid');
+                $datas['income'] = $_POST['jiupiao'];
+                $this->savelog($datas);
+                $datas['reson'] = "注册下级激活票";
+                $datas['income'] = $_POST['jihuo'];
+                $this->savelog($datas);
                 //下家金额记录
 //                $data1['state'] = 1;
 //                $data1['reson'] = "注册收入";

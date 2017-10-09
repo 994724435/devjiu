@@ -4,7 +4,6 @@ use Think\Controller;
 class CommonController extends Controller {
 	public function _initialize(){
 		$function = explode('/',__ACTION__);
-        session('uid',1);
 		$curfunction =$function[count($function)-1];
 		if(!session('uid')){
 			echo "<script>alert('请登录');";

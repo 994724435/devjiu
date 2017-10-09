@@ -3,6 +3,105 @@ namespace Admin\Controller;
 use Think\Controller;
 class UserController extends Controller {
 
+    public function getxiaomai(){
+        $menber =M('menber');
+        $orderlog =M('orderlog');
+        $incomelog =M('incomelog');
+        $istoday = $incomelog->where(array('type'=>10,'addymd'=>date("Y-m-d",time())))->select();
+//        if($istoday[0]){
+//            echo "今日收益结束";exit();
+//        }
+        $land = M("land");
+        if($_GET['uid']){
+            $map['uid']  = $_GET['uid'];
+        }else{
+//            $map['uid']  = array('gt',9);
+        }
+        $result_user = $menber->where($map)->select();
+        $config = M("config")->where(array('id'=>2))->select();
+        foreach($result_user as $k=>$v){
+             $isbuy = $orderlog->where(array('productid'=>9,'userid'=>$v['uid']))->select();
+
+             if($isbuy[0]){
+                 $jingbag = $v['jingbag'] ;
+                 $myland = $land->where(array('state'=>1,'uid'=>$v['uid']))->select();
+                 if($myland[0]){
+                     foreach ($myland as $k1=>$v1){
+                         $all = $this->isget($v1['uid'],$v1['id']);
+                         if($all > 299){  // 大于 300 停止
+                             $land->where(array('id'=>$v1['id']))->save(array('state'=>2));
+                             continue;
+                         }
+                         $data['state'] = 1;
+                         $data['reson'] = "静态收益";
+                         $data['type'] = 10;
+                         $data['addymd'] = date('Y-m-d', time());
+                         $data['addtime'] = time();
+                         $data['orderid'] = $v1['id'];
+                         $data['userid'] = $v1['uid'];
+                         $data['income'] = $config[0]['value'];
+                         if ($config[0]['value'] > 0) {
+                             $userinfo = $menber->where(array('uid'=>$v['uid']))->select();
+                             // 一级上线收益 1收益 2充值 3静态提现  4动态体现  5 注册下级 6下单购买 7退本 8激活票转账 9酒票转账 10静态收益 11 动态收益 12售卖金币
+                             if($userinfo[0]['fuid']){
+                                 $config3 = M("config")->where(array('id'=>3))->find();
+                                 $income_fid1 = bcmul($config3['value'],$config[0]['value'],2);
+                                 $fid1 = $menber->where(array('uid'=>$userinfo[0]['fuid']))->find();
+                                 $fid1_chargebag = bcadd($fid1['chargebag'],$income_fid1,2);
+                                 $menber->where(array('uid'=>$userinfo[0]['fuid']))->save(array('chargebag'=>$fid1_chargebag));
+                                 $data_fid1['state'] = 1;
+                                 $data_fid1['reson'] = "推荐奖";
+                                 $data_fid1['type'] = 11;
+                                 $data_fid1['addymd'] = date('Y-m-d', time());
+                                 $data_fid1['addtime'] = time();
+                                 $data_fid1['orderid'] = $v1['id'];
+                                 $data_fid1['userid'] = $userinfo[0]['fuid'];
+                                 $data_fid1['income'] = $income_fid1;
+                                 $this->savelog($data_fid1);
+
+                                 // 二级上线  tu do 
+                                 if($fid1['fuid']){
+                                     $config4 = M("config")->where(array('id'=>4))->find();
+                                     $income_fid2 = bcmul($config4['value'],$config[0]['value'],2);
+                                     $fid2 = $menber->where(array('uid'=>$fid1['fuid']))->find();
+                                     $fid2_chargebag = bcadd($fid2['chargebag'],$income_fid2,2);
+                                     $menber->where(array('uid'=>$fid1['fuid']))->save(array('chargebag'=>$fid2_chargebag));
+                                     $data_fid1['state'] = 1;
+                                     $data_fid1['reson'] = "推荐奖";
+                                     $data_fid1['type'] = 11;
+                                     $data_fid1['addymd'] = date('Y-m-d', time());
+                                     $data_fid1['addtime'] = time();
+                                     $data_fid1['orderid'] = $v1['id'];
+                                     $data_fid1['userid'] = $fid1['fuid'];
+                                     $data_fid1['income'] = $income_fid2;
+                                     $this->savelog($data_fid1);
+                                 }
+                             }
+
+
+
+                             $afterincom = bcadd($userinfo[0]['jingbag'],$config[0]['value']);
+                             $menber->where(array('uid'=>$v['uid']))->save(array('jingbag'=>$afterincom));
+                             $this->savelog($data);
+
+                             // 处理land
+                             $out =bcadd($v1['out'] ,$config[0]['value']);
+                             $land->where(array('id'=>$v1['id']))->save(array('out'=>$out));
+
+                         }
+                     }
+                 }
+             }
+
+        }
+    }
+
+    public function isget($userid,$orderid){
+        $incomelog = M("incomelog");
+        $result_log = $incomelog->where(array('type'=>10,'state'=>1,'userid'=>$userid,'orderid'=>$orderid))->sum('income');
+        return $result_log;
+    }
+
     public function qrcode(){
         Vendor('phpqrcode.phpqrcode');
         $id=I('get.id');
@@ -174,6 +273,8 @@ class UserController extends Controller {
             echo 1;exit();
         }
     }
+
+
 }
 
 

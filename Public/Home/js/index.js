@@ -84,7 +84,7 @@ $(".land .jiuTong").click(function(event) {
 
       $.ajax({
          type: "POST",
-         url: "http://122.114.76.216/index.php/Home/Index/dealland",
+         url: "http://localhost/devjiu/index.php/Home/Index/dealland",
          data: {
             landId:landId,
             toolId:toolId

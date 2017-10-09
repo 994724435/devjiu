@@ -106,10 +106,10 @@
 			<img src="__ROOT__/Public/Home/img/x.png" alt="" class="closeImg">
 		</div>
 		<form action="__ROOT__/index.php/Home/Index/buyProduct"  method="post"  enctype="multipart/form-data">
-			<input type="hidden" id="goodsMoney1">
-			<input type="hidden" id="goodsId1">
-			<input type="hidden" id="kucun1">
-            <input type="hidden" id="buy_num1">
+			<input type="hidden" name="goodsMoney" id="goodsMoney1">
+			<input type="hidden" name="goodsId" id="goodsId1">
+			<input type="hidden" name="kucun" id="kucun1">
+            <input type="hidden" name="num" id="buy_num1">
 			<ul>
 				<li class="main_com_li">
 					<span class="main_com_li_left">收货人地址:</span>
@@ -135,7 +135,7 @@
 				<img src="__ROOT__/Public/Home/img/code.jpg" alt="" class="codeimg">
 			</ul>
 
-			<button type="button" class="confirm">确认购买</button>
+			<button type="submit" class="confirm">确认购买</button>
 		</form>
 	</div>
 	<!-- 收货地址弹窗end -->
