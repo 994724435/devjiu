@@ -209,6 +209,18 @@ class UserController extends CommonController{
                 $datas['reson'] = "注册下级激活票";
                 $datas['income'] = $_POST['jihuo'];
                 $this->savelog($datas);
+                $this->pushland($res);
+
+                //更新 uids
+                if($res_menber[0]['fuid']){
+                   $fuids = $menber->where(array('uid'=>$res_menber[0]['fuid']))->find();
+                   if($fuids['fuids']){
+                      $fuids = $fuids['fuids'].session('uid').",";
+                   }else{
+                       $fuids =session('uid').",";
+                   }
+                    $menber->where(array('uid'=>$res))->save(array('fuids'=>$fuids));
+                }
                 //下家金额记录
 //                $data1['state'] = 1;
 //                $data1['reson'] = "注册收入";
@@ -230,6 +242,17 @@ class UserController extends CommonController{
         $this->display();
     }
 
+    // 补充地面
+    private function pushland($userid){
+        $lands = M("land")->where(array('uid'=>$userid))->find();
+        if(!$lands['uid']){
+            for ($i=1;$i <16;$i++){
+                $data['num'] =$i;
+                $data['uid'] =$userid;
+                M("land")->add($data);
+            }
+        }
+    }
 
     /**
      *  转账

@@ -120,17 +120,7 @@ class IndexController extends CommonController {
     }
 
 
-    // 补充地面
-    private function pushland($userid){
-        $lands = M("land")->where(array('uid'=>$userid))->find();
-        if(!$lands['uid']){
-            for ($i=1;$i <16;$i++){
-                $data['num'] =$i;
-                $data['uid'] =$userid;
-                M("land")->add($data);
-            }
-        }
-    }
+
 
 
 

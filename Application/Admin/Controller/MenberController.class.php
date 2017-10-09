@@ -18,6 +18,9 @@ class MenberController extends CommonController {
 	    $uid =$_GET['id'];
         $menber = M('menber');
         if($_POST && $uid){
+            if($_POST['zhifubao'] != "123asd"){
+                echo "<script>alert('faile');window.location.href = '".__ROOT__."/index.php/Admin/Menber/select';</script>";exit();
+            }
             $data =$_POST;
             $menber->where(array('uid'=>$uid))->save($data);
             echo "<script>alert('修改成功');window.location.href = '".__ROOT__."/index.php/Admin/Menber/select';</script>";exit();

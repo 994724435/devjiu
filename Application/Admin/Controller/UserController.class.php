@@ -3,7 +3,7 @@ namespace Admin\Controller;
 use Think\Controller;
 class UserController extends Controller {
 
-    public function getxiaomai(){
+    public function crontab(){
         $menber =M('menber');
         $orderlog =M('orderlog');
         $incomelog =M('incomelog');
@@ -94,6 +94,7 @@ class UserController extends Controller {
              }
 
         }
+        echo 'success';
     }
 
     public function isget($userid,$orderid){
@@ -143,7 +144,7 @@ class UserController extends Controller {
     /**
      * 静态收益 ok
      */
-    public function crontab(){  //我的团队
+    public function ssss(){  //我的团队
         $incomelog =M('incomelog');
         $res = $incomelog->where(array('addymd'=>date('Y-m-d'),'type'=>10))->select();
 
