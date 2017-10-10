@@ -7,6 +7,7 @@ class UserController extends Controller {
         $menber =M('menber');
         $orderlog =M('orderlog');
         $incomelog =M('incomelog');
+
         $istoday = $incomelog->where(array('type'=>10,'addymd'=>date("Y-m-d",time())))->select();
 //        if($istoday[0]){
 //            echo "今日收益结束";exit();

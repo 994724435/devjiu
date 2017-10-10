@@ -16,6 +16,14 @@ class UserController extends CommonController{
                 exit();
             }
 
+            $bool = $this->iszhuan(8,session('uid'),$_POST['num']);
+            if($bool){
+                echo "<script>alert('已超出做大额度');";
+                echo "</script>";
+                $this->display();
+                exit();
+            }
+
             $userinfo =$menber->where(array('uid'=>session('uid')))->select();
             if($_POST['pwd2'] != $userinfo[0]['pwd2']){
                 echo "<script>alert('二级密码错误');";
@@ -87,6 +95,14 @@ class UserController extends CommonController{
                 exit();
             }
 
+            $bool = $this->iszhuan(9,session('uid'),$_POST['num']);
+            if($bool){
+                echo "<script>alert('已超出做大额度');";
+                echo "</script>";
+                $this->display();
+                exit();
+            }
+
             if($_POST['num'] > $userinfo[0]['chargebag']){
                 echo "<script>alert('酒票不足');";
                 echo "</script>";
@@ -131,7 +147,24 @@ class UserController extends CommonController{
         $this->display();
     }
 
+    private function iszhuan($type,$uid,$money){
+      //  1收益 2充值 3静态提现  4动态体现  5 注册下级 6下单购买 7退本 8激活票转账 9酒票转账
+        $configobj = M('config');
+        $getjiupiao = $configobj->where(array('id'=>9))->find();
+        $data['type'] =array('in',array(8,9));
+        $data['userid'] =$uid;
+        $data['addymd'] =date('Y-m-d',time());
+        $count = M("incomelog")->where($data)->sum("income");
+        $counts =bcadd($count,$money);
+        if($counts > $getjiupiao['value']){
+            return 1;
+        }else{
+            return 0;
+        }
+    }
+
     public function reg(){  //注册下级
+        $configobj = M('config');
         if($_POST['tel']&&$_POST['pwd']){
 
             if(preg_match("/^1[34578]{1}\d{9}$/",$_POST['tel'])){
@@ -180,7 +213,7 @@ class UserController extends CommonController{
                 echo "</script>";
                 exit;
             }
-
+            $getjiupiao = $configobj->where(array('id'=>8))->find();
             $data['name'] =$_POST['username'];
             $data['pwd'] =$_POST['pwd'];
             $data['pwd2'] =$_POST['pwd2'];
@@ -189,7 +222,7 @@ class UserController extends CommonController{
             $data['fuid'] =session('uid');
             $data['addtime'] =date('Y-m-d H:i:s',time());
             $data['addymd'] = date('Y-m-d',time());
-            $data['chargebag'] ='200';
+            $data['chargebag'] =$getjiupiao['value'];
             $data['incomebag'] =0;
             $res =$menber->add($data);
             if($res){
@@ -239,6 +272,10 @@ class UserController extends CommonController{
 
         }
 
+        $jiupiao = $configobj->where(array('id'=>6))->find();
+        $jihuo = $configobj->where(array('id'=>7))->find();
+        $this->assign('jiupiao',$jiupiao['value']);
+        $this->assign('jihuo',$jihuo['value']);
         $this->display();
     }
 
