@@ -13,7 +13,7 @@
 <body class="indexBg">
 <ul class="lands">
 	<foreach name="land" item='v'>
-	<li class="land land{$v.num}" style="background: url(__ROOT__/Public/Home/img/p_2.png) no-repeat;" data-land="{$v.num}">
+	<li class="land land{$v.num}" style="background: url(__ROOT__/Public/Home/img/p_<?php if($v['ishei'] ==1){echo 1;}else{echo 2;} ?>.png) no-repeat;" data-land="{$v.num}">
 		<if condition="$v.state eq 1">
 			<img src="__ROOT__/Public/Home/img/p_3.png" alt="" class="jiuTong">
 			<span class="application">{$v.out}</span>
@@ -163,7 +163,7 @@
 			<li>
 				<img src="__ROOT__/Public/Home/img/p_3.png" alt="">
 				<ul>
-					<li>酒桶：大米大米</li>
+					<li>酒窖：酿酒必备工具</li>
 					<li>数量：{$diproduct}</li>
 				</ul>
 				<span class="useSpan" data-id="1">使用</span>

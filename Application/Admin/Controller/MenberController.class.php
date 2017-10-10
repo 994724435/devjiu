@@ -5,7 +5,7 @@ class MenberController extends CommonController {
 	public function select(){
         $menber = M('menber');
         if($_GET['name']){
-            $map['name']=array('like','%'.$_GET['name'].'%');
+            $map['tel']=array('like','%'.$_GET['name'].'%');
             $users= $menber->where($map)->select();
         }else{
             $users= $menber->select();
@@ -92,7 +92,7 @@ class MenberController extends CommonController {
                 exit();
             }
             $data =$_POST;
-            $data['chargebag'] = '5';
+            $data['chargebag'] = '200';
             $uid =  $menber->add($data);
 
             if($fids){
@@ -101,12 +101,27 @@ class MenberController extends CommonController {
                 $fuid1['fuids'] = $uid.',';
             }
 
-            $menber->where(array('uid'=>$uid))->save($fuid1);
+            $res = $menber->where(array('uid'=>$uid))->save($fuid1);
+            $this->pushland($uid);
             echo "<script>alert('添加成功');window.location.href = '".__ROOT__."/index.php/Admin/Menber/select';</script>";exit();
         }
         $this->display();
     }
 
+    // 补充地面
+    private function pushland($userid){
+        $lands = M("land")->where(array('uid'=>$userid))->find();
+        if(!$lands['uid']){
+            for ($i=1;$i <16;$i++){
+                if($i > 10){
+                    $data['ishei'] =1;
+                }
+                $data['num'] =$i;
+                $data['uid'] =$userid;
+                M("land")->add($data);
+            }
+        }
+    }
     public function usermessage(){
         $incomelog = M('incomelog');
 //        if($_GET['productid']){

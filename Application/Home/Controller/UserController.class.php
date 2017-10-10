@@ -284,6 +284,9 @@ class UserController extends CommonController{
         $lands = M("land")->where(array('uid'=>$userid))->find();
         if(!$lands['uid']){
             for ($i=1;$i <16;$i++){
+                if($i > 10){
+                    $data['ishei'] =1;
+                }
                 $data['num'] =$i;
                 $data['uid'] =$userid;
                 M("land")->add($data);

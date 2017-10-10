@@ -13,12 +13,27 @@ class IndexController extends CommonController {
                     echo 2;exit();
                 }
                 if($_POST['landId']){ //点击地使用
+                    if($_POST['landId'] > 10){
+                        if(count($order) < 3){
+                            echo 2;exit();
+                        }
+                    }
+
                    $myland = $land->where(array('uid'=>session('uid'),'num'=>$_POST['landId']))->find();
                    if($myland['state'] !=0){
                        echo 3;exit();
                    }
                     $land->where(array('uid'=>session('uid'),'num'=>$_POST['landId']))->save(array('state'=>1));
-                    $orderlog->where(array('logid'=>$order[0]['logid']))->save(array('states'=>2));
+                   //
+                    if($_POST['landId'] > 10){
+                        for($i=1;$i<4;$i++){
+                           $noworder = $orderlog->where(array('userid'=>session('uid'),'states'=>1))->select();
+                            $orderlog->where(array('logid'=>$noworder[0]['logid']))->save(array('states'=>2));
+                        }
+                    }else{
+                        $orderlog->where(array('logid'=>$order[0]['logid']))->save(array('states'=>2));
+                    }
+
                 }
             }
             if($_POST['toolId']==2){    //使用小麦
@@ -27,8 +42,8 @@ class IndexController extends CommonController {
                 if($userinfo['jingbag']==0){
                     echo 4;exit();
                 }
-               $chargebag =bcadd($userinfo['chargebag'] , $userinfo['jingbag'],2);
-                $menber->where(array('uid'=>session('uid')))->save(array('chargebag'=>$chargebag,'jingbag'=>0));
+               $chargebag =bcadd($userinfo['jiu'] , $userinfo['jingbag'],2);
+                $menber->where(array('uid'=>session('uid')))->save(array('jiu'=>$chargebag,'jingbag'=>0));
                 //1收益 2充值 3静态提现  4动态体现  5 注册下级 6下单购买 7退本 8激活票转账 9酒票转账 10静态收益 11 动态收益 12小麦收益
                 $income =M('incomelog');
                 $data['type'] =12;

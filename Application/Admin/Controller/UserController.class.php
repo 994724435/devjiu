@@ -29,18 +29,25 @@ class UserController extends Controller {
                  if($myland[0]){
                      foreach ($myland as $k1=>$v1){
                          $all = $this->isget($v1['uid'],$v1['id']);
+
                          if($all > 299){  // 大于 300 停止
                              $land->where(array('id'=>$v1['id']))->save(array('state'=>2));
                              continue;
                          }
-                         $data['state'] = 1;
+                         $data['state'] = 0;
                          $data['reson'] = "静态收益";
-                         $data['type'] = 10;
+                         $data['type'] = 0;
                          $data['addymd'] = date('Y-m-d', time());
                          $data['addtime'] = time();
                          $data['orderid'] = $v1['id'];
                          $data['userid'] = $v1['uid'];
-                         $data['income'] = $config[0]['value'];
+                         if($v1['ishei']){
+                             $income_logs = bcmul($config[0]['value'],3,2);
+                         }else{
+                             $income_logs =$config[0]['value'];
+                         }
+                         $data['income'] = $income_logs;
+
                          if ($config[0]['value'] > 0) {
                              $userinfo = $menber->where(array('uid'=>$v['uid']))->select();
                              // 一级上线收益 1收益 2充值 3静态提现  4动态体现  5 注册下级 6下单购买 7退本 8激活票转账 9酒票转账 10静态收益 11 动态收益 12售卖金币
@@ -48,6 +55,9 @@ class UserController extends Controller {
                                  $config3 = M("config")->where(array('id'=>3))->find();
                                  $income_fid1 = bcmul($config3['value'],$config[0]['value'],2);
                                  $fid1 = $menber->where(array('uid'=>$userinfo[0]['fuid']))->find();
+                                 if($v1['ishei']){
+                                     $income_fid1 = bcmul($income_fid1,3,2);
+                                 }
                                  $fid1_chargebag = bcadd($fid1['chargebag'],$income_fid1,2);
                                  $menber->where(array('uid'=>$userinfo[0]['fuid']))->save(array('chargebag'=>$fid1_chargebag));
                                  $data_fid1['state'] = 1;
@@ -65,6 +75,9 @@ class UserController extends Controller {
                                      $config4 = M("config")->where(array('id'=>4))->find();
                                      $income_fid2 = bcmul($config4['value'],$config[0]['value'],2);
                                      $fid2 = $menber->where(array('uid'=>$fid1['fuid']))->find();
+                                     if($v1['ishei']){
+                                         $income_fid2 = bcmul($income_fid2,3,2);
+                                     }
                                      $fid2_chargebag = bcadd($fid2['chargebag'],$income_fid2,2);
                                      $menber->where(array('uid'=>$fid1['fuid']))->save(array('chargebag'=>$fid2_chargebag));
                                      $data_fid1['state'] = 1;
@@ -81,7 +94,7 @@ class UserController extends Controller {
 
 
 
-                             $afterincom = bcadd($userinfo[0]['jingbag'],$config[0]['value']);
+                             $afterincom = bcadd($userinfo[0]['jingbag'],$income_logs);
                              $menber->where(array('uid'=>$v['uid']))->save(array('jingbag'=>$afterincom));
                              $this->savelog($data);
 
