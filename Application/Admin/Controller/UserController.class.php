@@ -30,10 +30,18 @@ class UserController extends Controller {
                      foreach ($myland as $k1=>$v1){
                          $all = $this->isget($v1['uid'],$v1['id']);
 
-                         if($all > 299){  // 大于 300 停止
-                             $land->where(array('id'=>$v1['id']))->save(array('state'=>2));
-                             continue;
+                         if($v1['id'] > 10){
+                             if($all > 899){  // 大于 300 停止
+                                 $land->where(array('id'=>$v1['id']))->save(array('state'=>2));
+                                 continue;
+                             }
+                         }else{
+                             if($all > 299){  // 大于 300 停止
+                                 $land->where(array('id'=>$v1['id']))->save(array('state'=>2));
+                                 continue;
+                             }
                          }
+
                          $data['state'] = 0;
                          $data['reson'] = "静态收益";
                          $data['type'] = 0;

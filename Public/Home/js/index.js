@@ -8,8 +8,10 @@ $(function(){
     var money=$(this).attr('data-money');
     var id=$(this).attr('data-id');
     var kucun=$(this).attr('data-kucun');
+    var yunfei=$(this).attr('data-yunfei');
     $("#kuncun").val(kucun);
-   $("#goodsMoney").val(money);
+    $("#goodsMoney").val(money);
+    $("#goodsYun").val(yunfei);
   
    $("#goodsId").val(id);
    $("#shopMask").addClass('hidden');
@@ -32,6 +34,7 @@ $(function(){
        $("#buy_num1").val($("#buy_num").val());
        $("#goodsMoney1").val($("#goodsMoney").val());
        $("#goodsId1").val($("#goodsId").val());
+       $("#goodsYun1").val($("#goodsYun").val());
        $("#adressMask").show();
    });
     $("#adressMask .returnImg").click(function() {
