@@ -147,6 +147,28 @@ class UserController extends CommonController{
         $this->display();
     }
 
+    public function convert(){
+        if($_POST['num']){
+            $menber =M('menber');
+            $userinfo =$menber->where(array('uid'=>session('uid')))->select();
+            if($_POST['num'] > $userinfo[0]['jiu']){
+                echo "<script>alert('酒不足');";
+                echo "</script>";
+                $this->display();
+                exit();
+            }
+
+            $leftjiu =bcsub ($userinfo[0]['jiu'],$_POST['num'],2);
+            $jiupiao =bcadd ($userinfo[0]['chargebag'],$_POST['num'],2);
+            $menber->where(array('uid'=>session('uid')))->save(array('jiu'=>$leftjiu,'chargebag'=>$jiupiao));
+            echo "<script>alert('兑换成功');";
+            echo "window.location.href='".__ROOT__."/index.php/Home/User/my';";
+            echo "</script>";
+            exit;
+        }
+        $this->display();
+    }
+
     private function iszhuan($type,$uid,$money){
       //  1收益 2充值 3静态提现  4动态体现  5 注册下级 6下单购买 7退本 8激活票转账 9酒票转账
         $configobj = M('config');

@@ -21,6 +21,7 @@
 		          <th>logo</th>
 					<th>价格</th>
 					<th>库存</th>
+					<th>运费</th>
 					<th>状态</th>
 					<th>操作</th>
 		        </tr>
@@ -45,6 +46,7 @@
 		          <th><img src="{$v.pic}" style="max-width: 100px;max-height: 100px;"></th>
 				  <th>{$v.price}</th>
 				  <th>{$v.left}</th>
+				  <th>{$v.daycome}</th>
 				   <th><if condition="$v.state eq 1">出售中<elseif condition="$v.state eq 2"/>已下架</if></th>
 				  <th><a href="__ROOT__/index.php/Admin/Index/editeproduct/id/{$v.id}">修改</a>|<if condition="$v.state eq 1"><a href="javascript:if(confirm('确认下架吗?'))window.location='__ROOT__/index.php/Admin/Index/deleteproduct/id/{$v.id}'">下 架</a><elseif condition="$v.state eq 2"/><a href="javascript:if(confirm('确认上架吗?'))window.location='__ROOT__/index.php/Admin/Index/deleteproduct/id/{$v.id}'">上 架</a></if> </th>
 		        </tr>

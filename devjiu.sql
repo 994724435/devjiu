@@ -1,22 +1,22 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : localhost
-Source Server Version : 50540
+Source Server         : 本机
+Source Server Version : 50553
 Source Host           : localhost:3306
 Source Database       : devjiu
 
 Target Server Type    : MYSQL
-Target Server Version : 50540
+Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2017-10-10 23:11:47
+Date: 2017-10-11 13:00:44
 */
 
 SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------
--- Table structure for p_article
+-- Table structure for `p_article`
 -- ----------------------------
 DROP TABLE IF EXISTS `p_article`;
 CREATE TABLE `p_article` (
@@ -47,7 +47,7 @@ INSERT INTO `p_article` VALUES ('21', '曼雷弗安卓版APP下载', '2', '<p>\r
 INSERT INTO `p_article` VALUES ('22', '曼雷弗苹果版APP下载', '2', '<p>\r\n	<img src=\"/Public/Admin/js/attached/image/20170825/20170825134609_76360.jpg\" alt=\"\" /> \r\n</p>\r\n<h1>\r\n	曼雷弗（国际）风控基金苹果版APP下载：<span style=\"color:#E53333;\"><a href=\"https://fir.im/qemn\">https://fir.im/qemn</a></span> \r\n</h1>\r\n<h1>\r\n</h1>', '2017-08-25 13:52:16', '2017-08-25', 'admin', '1');
 
 -- ----------------------------
--- Table structure for p_config
+-- Table structure for `p_config`
 -- ----------------------------
 DROP TABLE IF EXISTS `p_config`;
 CREATE TABLE `p_config` (
@@ -82,7 +82,7 @@ INSERT INTO `p_config` VALUES ('18', '静态提现手续费', '0.03', '静态提
 INSERT INTO `p_config` VALUES ('19', '动态提现手续费', '0.08', '动态提现手续费');
 
 -- ----------------------------
--- Table structure for p_incomelog
+-- Table structure for `p_incomelog`
 -- ----------------------------
 DROP TABLE IF EXISTS `p_incomelog`;
 CREATE TABLE `p_incomelog` (
@@ -143,7 +143,7 @@ INSERT INTO `p_incomelog` VALUES ('14649', '11', '1', '推荐奖', '2017-10-10',
 INSERT INTO `p_incomelog` VALUES ('14650', '11', '1', '推荐奖', '2017-10-10', '1507644991', '71', '1', '9.0', '', null, null);
 
 -- ----------------------------
--- Table structure for p_land
+-- Table structure for `p_land`
 -- ----------------------------
 DROP TABLE IF EXISTS `p_land`;
 CREATE TABLE `p_land` (
@@ -268,7 +268,7 @@ INSERT INTO `p_land` VALUES ('104', '14', '1082', '0', null, null, '0', '1');
 INSERT INTO `p_land` VALUES ('105', '15', '1082', '0', null, null, '0', '1');
 
 -- ----------------------------
--- Table structure for p_menber
+-- Table structure for `p_menber`
 -- ----------------------------
 DROP TABLE IF EXISTS `p_menber`;
 CREATE TABLE `p_menber` (
@@ -304,7 +304,7 @@ CREATE TABLE `p_menber` (
 -- ----------------------------
 -- Records of p_menber
 -- ----------------------------
-INSERT INTO `p_menber` VALUES ('1', 'MIFl领队', 'a332211', '13649588123', null, '1', '88881', '90141', '0', '1,', null, null, '1', '888958.00', null, '123asd', null, null, null, null, null, '256', '0', '0', '2,', '0');
+INSERT INTO `p_menber` VALUES ('1', 'MIFl领队', 'a332211', '13649588123', null, '1', '10', '10', '0', '1,', null, null, '1', '201.00', null, '123asd', null, null, null, null, null, '256', '0', '0', '2,', '9.00');
 INSERT INTO `p_menber` VALUES ('2', '明月秋风', '123456', '17899556112', null, '1', '20.00', '0.00', '1', '1,2,', null, '2017-09-03', '123456', '41.00', null, null, null, null, null, null, null, '1319', '0', '0', null, '0');
 INSERT INTO `p_menber` VALUES ('3', '365财团', '135168', '13885805888', null, '1', '895.11', '0', '1', '1,3,', null, '2017-09-03', '135168', '1010.00', '', '', '', '', '', '', '', '19', '0', '0', null, '3.00');
 INSERT INTO `p_menber` VALUES ('4', '野狼战队', '123456', '18889580666', null, '1', '1067.66', '47', '3', '1,3,4,', null, '2017-09-03', '123456', '0.01', null, null, null, null, null, null, null, '44', '0', '0', null, '0');
@@ -409,7 +409,7 @@ INSERT INTO `p_menber` VALUES ('1081', '188832876412', '1', '188832876412', null
 INSERT INTO `p_menber` VALUES ('1082', '188832876499', '1', '188832876499', null, '1', '0', '0', '1', '1,1082,', null, null, '1', '200', null, null, null, null, null, null, null, '0', '0', '0', '', '0');
 
 -- ----------------------------
--- Table structure for p_message
+-- Table structure for `p_message`
 -- ----------------------------
 DROP TABLE IF EXISTS `p_message`;
 CREATE TABLE `p_message` (
@@ -440,7 +440,7 @@ INSERT INTO `p_message` VALUES ('7', 'admin', 'admin', '1', '全员', '全员', 
 INSERT INTO `p_message` VALUES ('8', 'admin', 'admin', '1', '全员', '全员', '0', 'asdfasfda', 'sadfasdf', '3', '2', '2017-10-08 12:03:01', null);
 
 -- ----------------------------
--- Table structure for p_orderlog
+-- Table structure for `p_orderlog`
 -- ----------------------------
 DROP TABLE IF EXISTS `p_orderlog`;
 CREATE TABLE `p_orderlog` (
@@ -494,7 +494,7 @@ INSERT INTO `p_orderlog` VALUES ('1109', '1080', '9', '土豆', '12', '/dev/devj
 INSERT INTO `p_orderlog` VALUES ('1110', '1080', '9', '土豆', '12', '/dev/devjiu/Public/Uploads/2017-10-08/59d9a084096c5.png', '1', '201710102206252908', '1507644385', '1', '14633', '2017-10-10', '1', null, '0');
 
 -- ----------------------------
--- Table structure for p_product
+-- Table structure for `p_product`
 -- ----------------------------
 DROP TABLE IF EXISTS `p_product`;
 CREATE TABLE `p_product` (
@@ -510,16 +510,17 @@ CREATE TABLE `p_product` (
   `salenum` int(11) DEFAULT '0',
   `left` int(11) DEFAULT '0' COMMENT '库存',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of p_product
 -- ----------------------------
 INSERT INTO `p_product` VALUES ('9', '土豆', '大师傅', '/dev/devjiu/Public/Uploads/2017-10-08/59d9a084096c5.png', '12', null, null, '1', '2017-10-08 11:53:27', '0', '18');
 INSERT INTO `p_product` VALUES ('10', '2', 'asd', '/dev/devjiu/Public/Uploads/2017-10-08/59d9a17d4c22e.png', '1', null, null, '1', '2017-10-08 11:54:37', '0', '476');
+INSERT INTO `p_product` VALUES ('11', 'admin5', '1', '/devjiu', '1', '20', null, '1', '2017-10-11 12:38:02', '0', '500');
 
 -- ----------------------------
--- Table structure for p_rite
+-- Table structure for `p_rite`
 -- ----------------------------
 DROP TABLE IF EXISTS `p_rite`;
 CREATE TABLE `p_rite` (
@@ -563,7 +564,7 @@ INSERT INTO `p_rite` VALUES ('31', '0.08', '09-09');
 INSERT INTO `p_rite` VALUES ('32', '0.1', '09-10');
 
 -- ----------------------------
--- Table structure for p_user
+-- Table structure for `p_user`
 -- ----------------------------
 DROP TABLE IF EXISTS `p_user`;
 CREATE TABLE `p_user` (
