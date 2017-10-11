@@ -167,7 +167,7 @@ class IndexController extends CommonController {
 
         $incomelog =M('incomelog');
         $condtion['userid'] =session('uid');
-        $condtion['type']   =array('gt',0);
+        $condtion['state']   =array('gt',0);
         $res = $incomelog->order('id DESC')->where($condtion)->select();
         $this->assign('res',$res);
         $this->display();
