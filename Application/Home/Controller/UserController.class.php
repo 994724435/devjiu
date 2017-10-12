@@ -9,6 +9,14 @@ class UserController extends CommonController{
         $menber =M('menber');
         if($_POST['num'] > 0 ){
             $otherinfo =$menber->where(array('tel'=>$_POST['tel']))->find();
+
+            if($otherinfo['uid'] == session('uid')){
+                echo "<script>alert('转账人不能为自己');";
+                echo "</script>";
+                $this->display();
+                exit();
+            }
+
             if(!$otherinfo['uid']){
                 echo "<script>alert('用户不存在');";
                 echo "</script>";
@@ -80,6 +88,14 @@ class UserController extends CommonController{
         $menber =M('menber');
         if($_POST['num'] > 0 ){
             $otherinfo =$menber->where(array('tel'=>$_POST['tel']))->find();
+
+            if($otherinfo['uid'] == session('uid')){
+                echo "<script>alert('转账人不能为自己');";
+                echo "</script>";
+                $this->display();
+                exit();
+            }
+
             if(!$otherinfo['uid']){
                 echo "<script>alert('用户不存在');";
                 echo "</script>";

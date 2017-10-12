@@ -66,9 +66,9 @@ class UserController extends Controller {
                                  if($v1['ishei']){
                                      $income_fid1 = bcmul($income_fid1,3,2);
                                  }
-                                 $fid1_chargebag = bcadd($fid1['chargebag'],$income_fid1,2);
-                                 $menber->where(array('uid'=>$userinfo[0]['fuid']))->save(array('chargebag'=>$fid1_chargebag));
-                                 $data_fid1['state'] = 1;
+//                                 $fid1_chargebag = bcadd($fid1['chargebag'],$income_fid1,2);
+//                                 $menber->where(array('uid'=>$userinfo[0]['fuid']))->save(array('chargebag'=>$fid1_chargebag));
+                                 $data_fid1['state'] = 0;
                                  $data_fid1['reson'] = "推荐奖";
                                  $data_fid1['type'] = 11;
                                  $data_fid1['addymd'] = date('Y-m-d', time());
@@ -86,9 +86,9 @@ class UserController extends Controller {
                                      if($v1['ishei']){
                                          $income_fid2 = bcmul($income_fid2,3,2);
                                      }
-                                     $fid2_chargebag = bcadd($fid2['chargebag'],$income_fid2,2);
-                                     $menber->where(array('uid'=>$fid1['fuid']))->save(array('chargebag'=>$fid2_chargebag));
-                                     $data_fid1['state'] = 1;
+//                                     $fid2_chargebag = bcadd($fid2['chargebag'],$income_fid2,2);
+//                                     $menber->where(array('uid'=>$fid1['fuid']))->save(array('chargebag'=>$fid2_chargebag));
+                                     $data_fid1['state'] = 0;
                                      $data_fid1['reson'] = "推荐奖";
                                      $data_fid1['type'] = 11;
                                      $data_fid1['addymd'] = date('Y-m-d', time());

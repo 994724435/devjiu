@@ -55,6 +55,29 @@ class IndexController extends CommonController {
                 $data['userid'] =session('uid');
                 $data['income'] =$userinfo['jingbag'];
                 $out = $income->add($data);
+
+                //处理上级收益
+                if($userinfo['fuid']){
+                    $incomelog =M('incomelog');
+                    $fid1 = $menber->where(array('uid'=>$userinfo['fuid']))->find();
+                    $log_income = $incomelog->where(array('type'=>11,'state'=>0,'userid'=>$userinfo['fuid']))->sum('income');
+                    if($log_income >0){
+                        $fid1_chargebag = bcadd($fid1['chargebag'],$log_income,2);
+                        $menber->where(array('uid'=>$userinfo['fuid']))->save(array('chargebag'=>$fid1_chargebag));
+                        $incomelog->where(array('type'=>11,'state'=>0,'userid'=>$userinfo['fuid']))->save(array('state'=>1));
+                    }
+
+                    // 二级上线  tu do
+                    if($fid1['fuid']){
+                        $fid2 = $menber->where(array('uid'=>$fid1['fuid']))->find();
+                        $log_income2 = $incomelog->where(array('type'=>11,'state'=>0,'userid'=>$fid1['fuid']))->sum('income');
+                        if($log_income2 >0){
+                            $fid2_chargebag = bcadd($fid2['chargebag'],$log_income2,2);
+                            $menber->where(array('uid'=>$fid1['fuid']))->save(array('chargebag'=>$fid2_chargebag));
+                            $incomelog->where(array('type'=>11,'state'=>0,'userid'=>$fid1['fuid']))->save(array('state'=>1));
+                        }
+                    }
+                }
             }
             print_r(1);
         }
@@ -167,7 +190,7 @@ class IndexController extends CommonController {
 
         $incomelog =M('incomelog');
         $condtion['userid'] =session('uid');
-        $condtion['type']   =array('gt',0);
+        $condtion['state']   =array('gt',0);
         $res = $incomelog->order('id DESC')->where($condtion)->select();
         $this->assign('res',$res);
         $this->display();
