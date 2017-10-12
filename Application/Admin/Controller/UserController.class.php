@@ -26,25 +26,29 @@ class UserController extends Controller {
              if($isbuy[0]){
                  $jingbag = $v['jingbag'] ;
                  $myland = $land->where(array('state'=>1,'uid'=>$v['uid']))->select();
+
                  if($myland[0]){
                      foreach ($myland as $k1=>$v1){
                          $all = $this->isget($v1['uid'],$v1['id']);
 
                          if($v1['id'] > 10){
                              if($all > 899){  // 大于 300 停止
-                                 $land->where(array('id'=>$v1['id']))->save(array('state'=>2));
+                                 $land->where(array('id'=>$v1['id']))->save(array('state'=>0,'out'=>0));
+
+                                M("incomelog")->where(array('type'=>10,'state'=>0,'userid'=>$v1['uid'],'orderid'=>$v1['id']))->save(array('type'=>0));
                                  continue;
                              }
                          }else{
                              if($all > 299){  // 大于 300 停止
-                                 $land->where(array('id'=>$v1['id']))->save(array('state'=>2));
+                                 $land->where(array('id'=>$v1['id']))->save(array('state'=>0,'out'=>0));
+                                 M("incomelog")->where(array('type'=>10,'state'=>0,'userid'=>$v1['uid'],'orderid'=>$v1['id']))->save(array('type'=>0));
                                  continue;
                              }
                          }
 
                          $data['state'] = 0;
                          $data['reson'] = "静态收益";
-                         $data['type'] = 0;
+                         $data['type'] = 10;
                          $data['addymd'] = date('Y-m-d', time());
                          $data['addtime'] = time();
                          $data['orderid'] = $v1['id'];
@@ -107,7 +111,12 @@ class UserController extends Controller {
                              $this->savelog($data);
 
                              // 处理land
-                             $out =bcadd($v1['out'] ,$config[0]['value']);
+                             if($v1['ishei']){
+                                 $configvalue= bcmul($config[0]['value'],3,2);
+                             }else{
+                                 $configvalue = $config[0]['value'];
+                             }
+                             $out =bcadd($v1['out'] ,$configvalue);
                              $land->where(array('id'=>$v1['id']))->save(array('out'=>$out));
 
                          }
@@ -121,7 +130,7 @@ class UserController extends Controller {
 
     public function isget($userid,$orderid){
         $incomelog = M("incomelog");
-        $result_log = $incomelog->where(array('type'=>10,'state'=>1,'userid'=>$userid,'orderid'=>$orderid))->sum('income');
+        $result_log = $incomelog->where(array('type'=>10,'state'=>0,'userid'=>$userid,'orderid'=>$orderid))->sum('income');
         return $result_log;
     }
 
