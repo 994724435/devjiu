@@ -83,6 +83,56 @@ class MenberController extends CommonController {
                     $this->display();
                     exit();
                 }
+
+
+                $nextuser = M("menber")->where(array('fuid'=>$_POST['fuid']))->count();
+                $res_menber =M("menber")->where(array('uid'=>$_POST['fuid']))->select();
+                if($nextuser >9){
+                    M("menber")->where(array('uid'=>$_POST['fuid']))->save(array('type'=>2));
+                    //3市长
+                    $next =  M("menber")->where(array('fuid'=>$_POST['fuid'],'type'=>2))->count();
+                    if($next > 9){
+                        $datas['state'] = 1;
+                        $datas['reson'] = "级别奖";
+                        $datas['type'] = 13;
+                        $datas['addymd'] = date('Y-m-d',time());
+                        $datas['addtime'] = time();
+                        $datas['orderid'] = $res;
+                        $datas['userid'] = $_POST['fuid'];
+                        $datas['income'] = 1;
+                        $this->savelog($datas);
+                        M("menber")->where(array('uid'=>$_POST['fuid']))->save(array('type'=>3));
+                        $affusernext = bcadd($res_menber[0]['chargebag'],1,2);
+                    }else{
+                        $datas['state'] = 1;
+                        $datas['reson'] = "级别奖";
+                        $datas['type'] = 13;
+                        $datas['addymd'] = date('Y-m-d',time());
+                        $datas['addtime'] = time();
+                        $datas['orderid'] = $res;
+                        $datas['userid'] = $_POST['fuid'];
+                        $datas['income'] = 1;
+                        $this->savelog($datas);
+                        $affusernext = bcadd($res_menber[0]['chargebag'],1,2);
+                    }
+                    M("menber")->where(array('uid'=>$_POST['fuid']))->save(array('chargebag'=>$affusernext));
+                }else{
+                    if($res_menber[0]['fuid']){
+                        $f_menber =M("menber")->where(array('uid'=>$res_menber[0]['fuid']))->find();
+                        $datas['state'] = 1;
+                        $datas['reson'] = "级别奖";
+                        $datas['type'] = 13;
+                        $datas['addymd'] = date('Y-m-d',time());
+                        $datas['addtime'] = time();
+                        $datas['orderid'] = $res;
+                        $datas['userid'] = $res_menber[0]['fuid'];
+                        $datas['income'] = 1;
+                        $this->savelog($datas);
+                        $affusernext = bcadd($f_menber['chargebag'],1,2);
+                        M("menber")->where(array('uid'=>$res_menber[0]['fuid']))->save(array('chargebag'=>$affusernext));
+                    }
+                }
+
             }
 
             $isuser= $menber->where(array('tel'=>$_POST['tel']))->select();
@@ -103,6 +153,7 @@ class MenberController extends CommonController {
 
             $res = $menber->where(array('uid'=>$uid))->save($fuid1);
             $this->pushland($uid);
+
             echo "<script>alert('添加成功');window.location.href = '".__ROOT__."/index.php/Admin/Menber/select';</script>";exit();
         }
         $this->display();

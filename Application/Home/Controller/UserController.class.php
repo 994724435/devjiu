@@ -263,6 +263,56 @@ class UserController extends CommonController{
             $data['chargebag'] =$getjiupiao['value'];
             $data['incomebag'] =0;
             $res =$menber->add($data);
+
+            //级别奖
+            $nextuser = M("menber")->where(array('fuid'=>session('uid')))->count();
+            if($nextuser >9){
+                M("menber")->where(array('uid'=>session('uid')))->save(array('type'=>2));
+                //3市长
+                $next =  M("menber")->where(array('fuid'=>session('uid'),'type'=>2))->count();
+                if($next > 9){
+                    $datas['state'] = 1;
+                    $datas['reson'] = "级别奖";
+                    $datas['type'] = 13;
+                    $datas['addymd'] = date('Y-m-d',time());
+                    $datas['addtime'] = time();
+                    $datas['orderid'] = $res;
+                    $datas['userid'] = session('uid');
+                    $datas['income'] = 1;
+                    $this->savelog($datas);
+                    M("menber")->where(array('uid'=>session('uid')))->save(array('type'=>3));
+                    $affusernext = bcadd($res_menber[0]['chargebag'],1,2);
+                }else{
+                    $datas['state'] = 1;
+                    $datas['reson'] = "级别奖";
+                    $datas['type'] = 13;
+                    $datas['addymd'] = date('Y-m-d',time());
+                    $datas['addtime'] = time();
+                    $datas['orderid'] = $res;
+                    $datas['userid'] = session('uid');
+                    $datas['income'] = 1;
+                    $this->savelog($datas);
+                    $affusernext = bcadd($res_menber[0]['chargebag'],1,2);
+                }
+                M("menber")->where(array('uid'=>session('uid')))->save(array('chargebag'=>$affusernext));
+            }else{
+                if($res_menber[0]['fuid']){
+                    $f_menber =M("menber")->where(array('uid'=>$res_menber[0]['fuid']))->find();
+                    $datas['state'] = 1;
+                    $datas['reson'] = "级别奖";
+                    $datas['type'] = 13;
+                    $datas['addymd'] = date('Y-m-d',time());
+                    $datas['addtime'] = time();
+                    $datas['orderid'] = $res;
+                    $datas['userid'] = $res_menber[0]['fuid'];
+                    $datas['income'] = 1;
+                    $this->savelog($datas);
+                    $affusernext = bcadd($f_menber['chargebag'],1,2);
+                    M("menber")->where(array('uid'=>$res_menber[0]['fuid']))->save(array('chargebag'=>$affusernext));
+                }
+            }
+
+
             if($res){
                 $chargebag =bcsub($res_menber[0]['chargebag'],$_POST['jiupiao'],2);
                 $jihuo =bcsub($res_menber[0]['dongbag'],$_POST['jihuo'],2);
@@ -472,11 +522,11 @@ class UserController extends CommonController{
         $nextuser = M("menber")->where(array('fuid'=>session('uid')))->count();
 
         if($nextuser >9){
-            M("menber")->where(array('uid'=>session('uid')))->select(array('type'=>2));
+            M("menber")->where(array('uid'=>session('uid')))->save(array('type'=>2));
             //3市长
            $next =  M("menber")->where(array('fuid'=>session('uid'),'type'=>2))->count();
            if($next > 9){
-               M("menber")->where(array('uid'=>session('uid')))->select(array('type'=>3));
+               M("menber")->where(array('uid'=>session('uid')))->save(array('type'=>3));
            }
         }
         $this->display();
