@@ -17,6 +17,10 @@
 	</header>
 	<div class="mui-content">
 		<ul class="mui-table-view">
+		    <li class="mui-table-view-cell">
+				 当前等级
+				<span class="fr"><if condition="$username.type eq 1"> VIP<elseif condition="$username.type eq 2"/>区长<elseif condition="$username.type eq 3"/>市长 </if></span>
+			</li>
 			<li class="mui-table-view-cell">
 				 会员账号
 				<span class="fr">{$username.tel}</span>

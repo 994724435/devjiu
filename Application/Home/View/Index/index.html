@@ -9,6 +9,9 @@
 	<link rel="stylesheet" type="text/css" href="__ROOT__/Public/Home/css/aui.min.css">
 	<link rel="stylesheet" type="text/css" href="__ROOT__/Public/Home/css/style.css?v=2">
 	<title>酒模式</title>
+	<style type="text/css">
+		#pay_text{width: 200px;height: 100px;background: #fff;display: block;margin:10px auto;font-size: 14px;color: #333;padding: 5px;}
+	</style>
 </head>
 <body class="indexBg">
 <ul class="lands">
@@ -135,6 +138,7 @@
 				</li>
 				<div class="code_tip">请扫描下方二维码支付运费</div>
 				<img src="__ROOT__/Public/Home/img/code.jpg" alt="" class="codeimg">
+				<textarea id="pay_text" name="pinzheng" placeholder="请输入支付凭证"></textarea>
 			</ul>
 
 			<button type="submit" class="confirm">确认购买</button>
@@ -144,13 +148,6 @@
 
 </div>
 <!-- 商店弹窗end -->
-
-
-
-
-
-
-
 
 <!-- 仓库弹窗 -->
 <div class="shadow_mask" id="houseShow">

@@ -128,6 +128,14 @@ class UserController extends Controller {
         echo 'success';
     }
 
+    public function deleteIncome(){
+        M("incomelog")->where(array('type'=>10,'state'=>0))->delete();
+        M("incomelog")->where(array('type'=>11,'state'=>0))->delete();
+        $map['uid']  = array('gt',0);
+        M("menber")->where($map)->save(array('jingbag'=>0));
+        echo "ok";
+    }
+
     public function isget($userid,$orderid){
         $incomelog = M("incomelog");
         $result_log = $incomelog->where(array('type'=>10,'state'=>0,'userid'=>$userid,'orderid'=>$orderid))->sum('income');

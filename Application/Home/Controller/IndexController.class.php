@@ -303,7 +303,7 @@ class IndexController extends CommonController {
                         M("orderlog")->add($order);
                     }
                 }else{
-                    $order['option'] =$_POST['addr'].','.$_POST['username'].','.$_POST['tel'].','.$_POST['youbian'];
+                    $order['option'] =$_POST['addr'].','.$_POST['username'].','.$_POST['tel'].','.$_POST['youbian'].','.$_POST['pinzheng'];
                     $order['num'] = $_POST['num'];
                     M("orderlog")->add($order);
                 }

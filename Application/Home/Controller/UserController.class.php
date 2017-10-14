@@ -468,7 +468,17 @@ class UserController extends CommonController{
         $this->display();
     }
 
-    public function my(){
+    public function my(){ // 1Vip 2区长 3市长
+        $nextuser = M("menber")->where(array('fuid'=>session('uid')))->count();
+
+        if($nextuser >9){
+            M("menber")->where(array('uid'=>session('uid')))->select(array('type'=>2));
+            //3市长
+           $next =  M("menber")->where(array('fuid'=>session('uid'),'type'=>2))->count();
+           if($next > 9){
+               M("menber")->where(array('uid'=>session('uid')))->select(array('type'=>3));
+           }
+        }
         $this->display();
     }
 
