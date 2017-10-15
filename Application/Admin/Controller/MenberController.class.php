@@ -73,11 +73,11 @@ class MenberController extends CommonController {
 
     private function changeatype($type){
         if($type==1){
-            return "VIP推荐奖";
+            return "VIP管理奖";
         }elseif ($type ==2){
-            return "市代推荐奖";
+            return "区代管理奖";
         }elseif ($type ==3){
-            return "区代推荐奖";
+            return "市代管理奖";
         }
 
     }
@@ -117,6 +117,7 @@ class MenberController extends CommonController {
             }
             $data =$_POST;
             $data['chargebag'] = '200';
+            $data['type'] = 1;
             $uid =  $menber->add($data);
 
 
@@ -128,75 +129,43 @@ class MenberController extends CommonController {
             }
 
             //处理级别奖
-            $fuids =  $fuid1['fuids'];
-            $newstr = substr($fuids,0,strlen($fuids)-1);
-            if($newstr){
-                $array_user=array_reverse(explode(',',$newstr));
-                foreach ($array_user as $key=>$value){
-                    $useinfos =$menber->where(array('uid'=>$value))->find();
-                    $datas['state'] = 1;
-                    $datas['reson'] =$this->changeatype($useinfos['type']);
-                    $datas['type'] = 13;
-                    $datas['addymd'] = date('Y-m-d',time());
-                    $datas['addtime'] = time();
-                    $datas['orderid'] = $res;
-                    $datas['userid'] =$value;
-                    if($useinfos['type']==1){
-                        if($key >0){
-                            continue;
-                        }else{
-                            $datas['income'] = 1;
-                        }
-                    }elseif ($useinfos['type']==2){
-                        $datas['income'] = 1;
-                    }elseif ($useinfos['type']==3){
-                        $datas['income'] = 2;
-                    }
-
-                    if($datas['income']){
-                        $this->savelog($datas);
-                        $changrbags = bcadd($useinfos['chargebag'],$datas['income'],2);
-                        $menber->where(array('uid'=>$value))->save(array('chargebag'=>$changrbags));
-                    }
-                }
-            }
+//            $fuids =  $fuid1['fuids'];
+//            $newstr = substr($fuids,0,strlen($fuids)-1);
+//            if($newstr){
+//                $array_user=array_reverse(explode(',',$newstr));
+//                foreach ($array_user as $key=>$value){
+//                    $useinfos =$menber->where(array('uid'=>$value))->find();
+//                    $datas['state'] = 1;
+//                    $datas['reson'] =$this->changeatype($useinfos['type']);
+//                    $datas['type'] = 13;
+//                    $datas['addymd'] = date('Y-m-d',time());
+//                    $datas['addtime'] = time();
+//                    $datas['orderid'] = $res;
+//                    $datas['userid'] =$value;
+//                    if($useinfos['type']==1){
+//                        if($key >0){
+//                            $datas['income'] = 0;
+//                            continue;
+//                        }else{
+//                            $datas['income'] = 1;
+//                        }
+//                    }elseif ($useinfos['type']==2){
+//                        $datas['income'] = 1;
+//                    }elseif ($useinfos['type']==3){
+//                        $datas['income'] = 2;
+//                    }
+//
+//                    if($datas['income']){
+//                        $this->savelog($datas);
+//                        $changrbags = bcadd($useinfos['chargebag'],$datas['income'],2);
+//                        $menber->where(array('uid'=>$value))->save(array('chargebag'=>$changrbags));
+//                    }
+//                }
+//            }
 
             $res = $menber->where(array('uid'=>$uid))->save($fuid1);
             $this->pushland($uid);
 
-            //处理级别奖
-            $fuids = $res_menber[0]['fuids'];
-            $newstr = substr($fuids,0,strlen($fuids)-1);
-            if($newstr){
-                $array_user=array_reverse(explode(',',$newstr));
-                foreach ($array_user as $key=>$value){
-                    $useinfos =$menber->where(array('uid'=>$value))->find();
-                    $datas['state'] = 1;
-                    $datas['reson'] =$this->changeatype($useinfos['type']);
-                    $datas['type'] = 13;
-                    $datas['addymd'] = date('Y-m-d',time());
-                    $datas['addtime'] = time();
-                    $datas['orderid'] = $res;
-                    $datas['userid'] =$value;
-                    if($useinfos['type']==1){
-                        if($key >1){
-                            continue;
-                        }else{
-                            $datas['income'] = 1;
-                        }
-                    }elseif ($useinfos['type']==2){
-                        $datas['income'] = 1;
-                    }elseif ($useinfos['type']==3){
-                        $datas['income'] = 2;
-                    }
-
-                    if($datas['income']){
-                        $this->savelog($datas);
-                        $changrbags = bcadd($useinfos['chargebag'],$datas['income'],2);
-                        $menber->where(array('uid'=>$value))->save(array('chargebag'=>$changrbags));
-                    }
-                }
-            }
 
             echo "<script>alert('添加成功');window.location.href = '".__ROOT__."/index.php/Admin/Menber/select';</script>";exit();
         }

@@ -365,7 +365,11 @@ class IndexController extends CommonController {
                 exit;
 
             }
-
+        }else{
+            echo "<script>alert('购买数量不为0');";
+            echo "window.location.href='".__ROOT__."/index.php/Home/Index/index';";
+            echo "</script>";
+            exit;
         }
 
 

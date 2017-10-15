@@ -204,7 +204,6 @@ class UserController extends CommonController{
     public function reg(){  //注册下级
         $configobj = M('config');
         if($_POST['tel']&&$_POST['pwd']){
-
             if(preg_match("/^1[34578]{1}\d{9}$/",$_POST['tel'])){
 
             }else{
@@ -255,7 +254,7 @@ class UserController extends CommonController{
             $data['name'] =$_POST['username'];
             $data['pwd'] =$_POST['pwd'];
             $data['pwd2'] =$_POST['pwd2'];
-            $data['type'] =0;
+            $data['type'] =1;
             $data['tel'] =$_POST['tel'];
             $data['fuid'] =session('uid');
             $data['addtime'] =date('Y-m-d H:i:s',time());
@@ -279,6 +278,7 @@ class UserController extends CommonController{
             if($res){
                 $chargebag =bcsub($res_menber[0]['chargebag'],$_POST['jiupiao'],2);
                 $jihuo =bcsub($res_menber[0]['dongbag'],$_POST['jihuo'],2);
+
                 $menber->where(array('uid'=>session('uid')))->save(array('chargebag'=>$chargebag,'dongbag'=>$jihuo));
                 // 上家金额记录
                 $datas['state'] = 2;
@@ -295,20 +295,9 @@ class UserController extends CommonController{
                 $this->savelog($datas);
                 $this->pushland($res);
 
-
-
-                //更新 uids
-                if($res_menber[0]['fuid']){
-                   $fuids = $menber->where(array('uid'=>$res_menber[0]['fuid']))->find();
-                   if($fuids['fuids']){
-                      $fuids = $fuids['fuids'].session('uid').",";
-                   }else{
-                       $fuids =session('uid').",";
-                   }
-                    $menber->where(array('uid'=>$res))->save(array('fuids'=>$fuids));
-                }
-
                 //处理级别奖
+                $myinfo = $menber->where(array('uid'=>session('uid')))->find();
+                $fuids =$myinfo['fuids'];
                 $newstr = substr($fuids,0,strlen($fuids)-1);
                 if($newstr){
                     $array_user=array_reverse(explode(',',$newstr));
@@ -322,11 +311,7 @@ class UserController extends CommonController{
                         $datas['orderid'] = $res;
                         $datas['userid'] =$value;
                         if($useinfos['type']==1){
-                            if($key >0){
-                                continue;
-                            }else{
-                                $datas['income'] = 1;
-                            }
+                            $datas['income'] = 1;
                         }elseif ($useinfos['type']==2){
                             $datas['income'] = 1;
                         }elseif ($useinfos['type']==3){
@@ -340,6 +325,19 @@ class UserController extends CommonController{
                         }
                     }
                 }
+
+                //更新 uids
+                if($res_menber[0]['fuid']){
+                   $fuids = $menber->where(array('uid'=>$res))->find();
+                   if($fuids['fuids']){
+                      $fuids = $fuids['fuids'].session('uid').",";
+                   }else{
+                       $fuids =session('uid').",";
+                   }
+                    $menber->where(array('uid'=>$res))->save(array('fuids'=>$fuids));
+                }
+
+
 
                 //下家金额记录
 //                $data1['state'] = 1;
@@ -368,11 +366,11 @@ class UserController extends CommonController{
 
     private function changeatype($type){
         if($type==1){
-            return "VIP推荐奖";
+            return "VIP管理奖";
         }elseif ($type ==2){
-            return "市代推荐奖";
+            return "区代管理奖";
         }elseif ($type ==3){
-            return "区代推荐奖";
+            return "市代管理奖";
         }
 
     }
