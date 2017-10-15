@@ -264,51 +264,14 @@ class UserController extends CommonController{
             $data['incomebag'] =0;
             $res =$menber->add($data);
 
-            //级别奖
+            //级别更新
             $nextuser = M("menber")->where(array('fuid'=>session('uid')))->count();
             if($nextuser >9){
                 M("menber")->where(array('uid'=>session('uid')))->save(array('type'=>2));
                 //3市长
                 $next =  M("menber")->where(array('fuid'=>session('uid'),'type'=>2))->count();
                 if($next > 9){
-                    $datas['state'] = 1;
-                    $datas['reson'] = "级别奖";
-                    $datas['type'] = 13;
-                    $datas['addymd'] = date('Y-m-d',time());
-                    $datas['addtime'] = time();
-                    $datas['orderid'] = $res;
-                    $datas['userid'] = session('uid');
-                    $datas['income'] = 1;
-                    $this->savelog($datas);
                     M("menber")->where(array('uid'=>session('uid')))->save(array('type'=>3));
-                    $affusernext = bcadd($res_menber[0]['chargebag'],1,2);
-                }else{
-                    $datas['state'] = 1;
-                    $datas['reson'] = "级别奖";
-                    $datas['type'] = 13;
-                    $datas['addymd'] = date('Y-m-d',time());
-                    $datas['addtime'] = time();
-                    $datas['orderid'] = $res;
-                    $datas['userid'] = session('uid');
-                    $datas['income'] = 1;
-                    $this->savelog($datas);
-                    $affusernext = bcadd($res_menber[0]['chargebag'],1,2);
-                }
-                M("menber")->where(array('uid'=>session('uid')))->save(array('chargebag'=>$affusernext));
-            }else{
-                if($res_menber[0]['fuid']){
-                    $f_menber =M("menber")->where(array('uid'=>$res_menber[0]['fuid']))->find();
-                    $datas['state'] = 1;
-                    $datas['reson'] = "级别奖";
-                    $datas['type'] = 13;
-                    $datas['addymd'] = date('Y-m-d',time());
-                    $datas['addtime'] = time();
-                    $datas['orderid'] = $res;
-                    $datas['userid'] = $res_menber[0]['fuid'];
-                    $datas['income'] = 1;
-                    $this->savelog($datas);
-                    $affusernext = bcadd($f_menber['chargebag'],1,2);
-                    M("menber")->where(array('uid'=>$res_menber[0]['fuid']))->save(array('chargebag'=>$affusernext));
                 }
             }
 
@@ -332,6 +295,8 @@ class UserController extends CommonController{
                 $this->savelog($datas);
                 $this->pushland($res);
 
+
+
                 //更新 uids
                 if($res_menber[0]['fuid']){
                    $fuids = $menber->where(array('uid'=>$res_menber[0]['fuid']))->find();
@@ -342,6 +307,40 @@ class UserController extends CommonController{
                    }
                     $menber->where(array('uid'=>$res))->save(array('fuids'=>$fuids));
                 }
+
+                //处理级别奖
+                $newstr = substr($fuids,0,strlen($fuids)-1);
+                if($newstr){
+                    $array_user=array_reverse(explode(',',$newstr));
+                    foreach ($array_user as $key=>$value){
+                        $useinfos =$menber->where(array('uid'=>$value))->find();
+                        $datas['state'] = 1;
+                        $datas['reson'] =$this->changeatype($useinfos['type']);
+                        $datas['type'] = 13;
+                        $datas['addymd'] = date('Y-m-d',time());
+                        $datas['addtime'] = time();
+                        $datas['orderid'] = $res;
+                        $datas['userid'] =$value;
+                        if($useinfos['type']==1){
+                            if($key >0){
+                                continue;
+                            }else{
+                                $datas['income'] = 1;
+                            }
+                        }elseif ($useinfos['type']==2){
+                            $datas['income'] = 1;
+                        }elseif ($useinfos['type']==3){
+                            $datas['income'] = 2;
+                        }
+
+                        if($datas['income']){
+                            $this->savelog($datas);
+                            $changrbags = bcadd($useinfos['chargebag'],$datas['income'],2);
+                            $menber->where(array('uid'=>$value))->save(array('chargebag'=>$changrbags));
+                        }
+                    }
+                }
+
                 //下家金额记录
 //                $data1['state'] = 1;
 //                $data1['reson'] = "注册收入";
@@ -365,6 +364,17 @@ class UserController extends CommonController{
         $this->assign('jiupiao',$jiupiao['value']);
         $this->assign('jihuo',$jihuo['value']);
         $this->display();
+    }
+
+    private function changeatype($type){
+        if($type==1){
+            return "VIP推荐奖";
+        }elseif ($type ==2){
+            return "市代推荐奖";
+        }elseif ($type ==3){
+            return "区代推荐奖";
+        }
+
     }
 
     // 补充地面

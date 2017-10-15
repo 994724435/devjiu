@@ -29,19 +29,17 @@ class UserController extends Controller {
 
                  if($myland[0]){
                      foreach ($myland as $k1=>$v1){
-                         $all = $this->isget($v1['uid'],$v1['id']);
-
-                         if($v1['id'] > 10){
+                         $all = $this->isget($v1['uid'],$v1['num']);
+                         if($v1['num'] > 10){
                              if($all > 899){  // 大于 300 停止
                                  $land->where(array('id'=>$v1['id']))->save(array('state'=>0,'out'=>0));
-
-                                M("incomelog")->where(array('type'=>10,'state'=>0,'userid'=>$v1['uid'],'orderid'=>$v1['id']))->save(array('type'=>0));
+                                M("incomelog")->where(array('type'=>10,'state'=>0,'userid'=>$v1['uid'],'orderid'=>$v1['num']))->save(array('type'=>0));
                                  continue;
                              }
                          }else{
                              if($all > 299){  // 大于 300 停止
                                  $land->where(array('id'=>$v1['id']))->save(array('state'=>0,'out'=>0));
-                                 M("incomelog")->where(array('type'=>10,'state'=>0,'userid'=>$v1['uid'],'orderid'=>$v1['id']))->save(array('type'=>0));
+                                 M("incomelog")->where(array('type'=>10,'state'=>0,'userid'=>$v1['uid'],'orderid'=>$v1['num']))->save(array('type'=>0));
                                  continue;
                              }
                          }
@@ -51,7 +49,7 @@ class UserController extends Controller {
                          $data['type'] = 10;
                          $data['addymd'] = date('Y-m-d', time());
                          $data['addtime'] = time();
-                         $data['orderid'] = $v1['id'];
+                         $data['orderid'] = $v1['num'];
                          $data['userid'] = $v1['uid'];
                          if($v1['ishei']){
                              $income_logs = bcmul($config[0]['value'],3,2);
@@ -77,7 +75,7 @@ class UserController extends Controller {
                                  $data_fid1['type'] = 11;
                                  $data_fid1['addymd'] = date('Y-m-d', time());
                                  $data_fid1['addtime'] = time();
-                                 $data_fid1['orderid'] = $v1['id'];
+                                 $data_fid1['orderid'] = $v1['num'];
                                  $data_fid1['userid'] = $userinfo[0]['fuid'];
                                  $data_fid1['income'] = $income_fid1;
                                  $this->savelog($data_fid1);
@@ -97,7 +95,7 @@ class UserController extends Controller {
                                      $data_fid1['type'] = 11;
                                      $data_fid1['addymd'] = date('Y-m-d', time());
                                      $data_fid1['addtime'] = time();
-                                     $data_fid1['orderid'] = $v1['id'];
+                                     $data_fid1['orderid'] = $v1['num'];
                                      $data_fid1['userid'] = $fid1['fuid'];
                                      $data_fid1['income'] = $income_fid2;
                                      $this->savelog($data_fid1);
