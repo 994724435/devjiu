@@ -120,48 +120,53 @@ class MenberController extends CommonController {
             $data['type'] = 1;
             $uid =  $menber->add($data);
 
-
-
+            $bool = 0 ;
             if($fids){
                 $fuid1['fuids'] = $fids.$uid.',';
+                $bool =1;
             }else{
                 $fuid1['fuids'] = $uid.',';
             }
 
             //处理级别奖
-//            $fuids =  $fuid1['fuids'];
-//            $newstr = substr($fuids,0,strlen($fuids)-1);
-//            if($newstr){
-//                $array_user=array_reverse(explode(',',$newstr));
-//                foreach ($array_user as $key=>$value){
-//                    $useinfos =$menber->where(array('uid'=>$value))->find();
-//                    $datas['state'] = 1;
-//                    $datas['reson'] =$this->changeatype($useinfos['type']);
-//                    $datas['type'] = 13;
-//                    $datas['addymd'] = date('Y-m-d',time());
-//                    $datas['addtime'] = time();
-//                    $datas['orderid'] = $res;
-//                    $datas['userid'] =$value;
-//                    if($useinfos['type']==1){
-//                        if($key >0){
-//                            $datas['income'] = 0;
-//                            continue;
-//                        }else{
-//                            $datas['income'] = 1;
-//                        }
-//                    }elseif ($useinfos['type']==2){
-//                        $datas['income'] = 1;
-//                    }elseif ($useinfos['type']==3){
-//                        $datas['income'] = 2;
-//                    }
-//
-//                    if($datas['income']){
-//                        $this->savelog($datas);
-//                        $changrbags = bcadd($useinfos['chargebag'],$datas['income'],2);
-//                        $menber->where(array('uid'=>$value))->save(array('chargebag'=>$changrbags));
-//                    }
-//                }
-//            }
+            $fuids =  $fuid1['fuids'];
+            $newstr = substr($fuids,0,strlen($fuids)-1);
+            if($newstr && $bool ){
+                $array_user=array_reverse(explode(',',$newstr));
+
+                foreach ($array_user as $key=>$value){
+                    $useinfos =$menber->where(array('uid'=>$value))->find();
+                    $datas['state'] = 1;
+                    $datas['reson'] =$this->changeatype($useinfos['type']);
+                    $datas['type'] = 13;
+                    $datas['addymd'] = date('Y-m-d',time());
+                    $datas['addtime'] = time();
+                    $datas['orderid'] = $value;
+                    $datas['userid'] =$value;
+                    if($useinfos['type']==1){
+                        if($key == 0){
+                            $datas['income'] = 0;
+                            continue;
+                        }else{
+                            if($key > 3){
+                                $datas['income'] = 0;
+                                continue;
+                            }
+                            $datas['income'] = 1;
+                        }
+                    }elseif ($useinfos['type']==2){
+                        $datas['income'] = 1;
+                    }elseif ($useinfos['type']==3){
+                        $datas['income'] = 2;
+                    }
+
+                    if($datas['income']){
+                        $this->savelog($datas);
+                        $changrbags = bcadd($useinfos['chargebag'],$datas['income'],2);
+                        $menber->where(array('uid'=>$value))->save(array('chargebag'=>$changrbags));
+                    }
+                }
+            }
 
             $res = $menber->where(array('uid'=>$uid))->save($fuid1);
             $this->pushland($uid);

@@ -301,6 +301,7 @@ class UserController extends CommonController{
                 $newstr = substr($fuids,0,strlen($fuids)-1);
                 if($newstr){
                     $array_user=array_reverse(explode(',',$newstr));
+
                     foreach ($array_user as $key=>$value){
                         $useinfos =$menber->where(array('uid'=>$value))->find();
                         $datas['state'] = 1;
@@ -311,6 +312,10 @@ class UserController extends CommonController{
                         $datas['orderid'] = $res;
                         $datas['userid'] =$value;
                         if($useinfos['type']==1){
+                            if($key >2){
+                                $datas['income'] = 0;
+                                continue;
+                            }
                             $datas['income'] = 1;
                         }elseif ($useinfos['type']==2){
                             $datas['income'] = 1;
