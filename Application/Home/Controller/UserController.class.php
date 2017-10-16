@@ -332,12 +332,12 @@ class UserController extends CommonController{
                 }
 
                 //更新 uids
-                if($res_menber[0]['fuid']){
-                   $fuids = $menber->where(array('uid'=>$res))->find();
+                if($res_menber[0]['fuids']){
+                   $fuids = $menber->where(array('uid'=>session('uid')))->find();
                    if($fuids['fuids']){
-                      $fuids = $fuids['fuids'].session('uid').",";
+                      $fuids = $fuids['fuids'].$res.",";
                    }else{
-                       $fuids =session('uid').",";
+                       $fuids =session('uid').",".$res.',';
                    }
                     $menber->where(array('uid'=>$res))->save(array('fuids'=>$fuids));
                 }
